@@ -1,0 +1,169 @@
+import javafx.scene.control.Cell;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+
+public class Board extends JFrame implements Dice, Rules{
+
+ public Board() {
+     setSize(1000, 1000);
+     setLocation(500, 20);
+     setDefaultCloseOperation(EXIT_ON_CLOSE);
+     JPanel panel = new JPanel();
+     JLabel label = new JLabel();
+
+     setLayout(new GridLayout(11, 11));
+     //**2d array to go on the grid*/
+     JLabel gridlayout[][] = new JLabel[11][11];
+
+     for (int row = 0; row < gridlayout.length; row++) {
+         for (int col = 0; col < gridlayout.length; col++) {
+             gridlayout[row][col] = new JLabel();
+             gridlayout[row][col].setBorder(new LineBorder(Color.BLACK));
+             gridlayout[row][col].setOpaque(true);
+             super.add(gridlayout[row][col]);
+
+
+         }
+     }
+     //Home space
+     for (int i = 0; i < 3; i++) {
+         for (int j = 0; j < 3; j++) {
+             gridlayout[i][j].setBackground(Color.BLUE);
+
+         }
+     }
+     for (int i = 0; i < 3; i++) {
+         for (int j = 8; j < 11; j++) {
+             gridlayout[i][j].setBackground(Color.RED);
+
+         }
+     }
+     for (int i = 8; i < 11; i++) {
+         for (int j = 0; j < 3; j++) {
+             gridlayout[i][j].setBackground(Color.PINK);
+
+         }
+     }
+     for (int i = 8; i < 11; i++) {
+         for (int j = 8; j < 11; j++) {
+             gridlayout[i][j].setBackground(Color.GREEN);
+
+         }
+     }
+     //path around board
+     for (int x = 3; x < 8; x++) {
+
+         gridlayout[x][0].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 0; y < 4; y++) {
+
+         gridlayout[3][y].setBackground(Color.ORANGE);
+
+     }
+     for (int x = 0; x < 4; x++) {
+
+         gridlayout[x][3].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 3; y < 8; y++) {
+
+         gridlayout[0][y].setBackground(Color.ORANGE);
+
+     }
+     for (int x = 0; x < 4; x++) {
+
+         gridlayout[x][7].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 7; y < 11; y++) {
+
+         gridlayout[3][y].setBackground(Color.ORANGE);
+
+     }
+     for (int x = 3; x < 8; x++) {
+
+         gridlayout[x][10].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 7; y < 11; y++) {
+
+         gridlayout[7][y].setBackground(Color.ORANGE);
+
+     }
+     for (int x = 7; x < 11; x++) {
+
+         gridlayout[x][7].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 3; y < 7; y++) {
+
+         gridlayout[10][y].setBackground(Color.ORANGE);
+
+     }
+     for (int x = 7; x < 11; x++) {
+
+         gridlayout[x][3].setBackground(Color.ORANGE);
+
+     }
+     for (int y = 0; y < 4; y++) {
+
+         gridlayout[7][y].setBackground(Color.ORANGE);
+
+     }
+     //path home for blue
+     for (int y = 1; y < 5; y++) {
+
+         gridlayout[5][y].setBackground(Color.BLUE);
+
+     }
+     //path home for red
+     for (int x = 1; x < 5; x++) {
+
+         gridlayout[x][5].setBackground(Color.RED);
+
+     }
+     //path home for green
+     for (int y = 6; y < 10; y++) {
+
+         gridlayout[5][y].setBackground(Color.GREEN);
+
+     }
+     //path home for pink
+     for (int x = 6; x < 10; x++) {
+
+         gridlayout[x][5].setBackground(Color.PINK);
+
+     }
+    //blue starting point
+     gridlayout[4][0].setText("Start");
+     gridlayout[4][0].setFont(new Font("Monospaced",Font.ITALIC,15));
+     //red starting point
+     gridlayout[0][6].setText("Start");
+     gridlayout[0][6].setFont(new Font("Monospaced",Font.ITALIC,15));
+     //green starting point
+     gridlayout[6][10].setText("Start");
+     gridlayout[6][10].setFont(new Font("Monospaced",Font.ITALIC,15));
+     //pink starting point
+     gridlayout[10][4].setText("Start");
+     gridlayout[10][4].setFont(new Font("Monospaced",Font.ITALIC,15));
+
+
+
+
+
+
+
+
+
+
+
+
+ }
+    @Override
+    public void RollDice() {
+
+    }
+}
