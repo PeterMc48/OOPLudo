@@ -3,6 +3,7 @@ import javax.swing.*;
 public class Players extends JFrame {
     private String name;
     private String colour;
+    protected Token tokens;
 
     @Override
     public String getName() {
@@ -21,13 +22,8 @@ public class Players extends JFrame {
     public void setColour(String colour) {
         this.colour = colour;
     }
-    public Players(String name,String colour){
+    public Players(String name,String colour,Token tokens){
         setName(name);
         setColour(colour);
-    }
-
-    @Override
-    public String toString() {
-        return super.toString();
     }
 }

@@ -28,30 +28,41 @@ public class Board extends JFrame implements Dice, Rules{
          }
      }
      //Home space
+     //blue
      for (int i = 0; i < 3; i++) {
-         for (int j = 0; j < 3; j++) {
-             gridlayout[i][j].setBackground(Color.BLUE);
-
-         }
+         gridlayout[i][0].setBackground(Color.BLUE);
      }
+     for (int j = 0; j < 3; j++) {
+         gridlayout[0][j].setBackground(Color.BLUE);
+
+     }
+     //red
      for (int i = 0; i < 3; i++) {
-         for (int j = 8; j < 11; j++) {
-             gridlayout[i][j].setBackground(Color.RED);
 
-         }
+             gridlayout[i][10].setBackground(Color.RED);
      }
+     for (int j = 8; j < 11; j++) {
+
+         gridlayout[0][j].setBackground(Color.RED);
+     }
+     //Pink
      for (int i = 8; i < 11; i++) {
-         for (int j = 0; j < 3; j++) {
-             gridlayout[i][j].setBackground(Color.PINK);
+         gridlayout[i][0].setBackground(Color.PINK);
+     }
+     for (int j = 0; j < 3; j++) {
+
+         gridlayout[10][j].setBackground(Color.PINK);
 
          }
-     }
+     //Green
      for (int i = 8; i < 11; i++) {
+         gridlayout[i][10].setBackground(Color.GREEN);
+     }
          for (int j = 8; j < 11; j++) {
-             gridlayout[i][j].setBackground(Color.GREEN);
+             gridlayout[10][j].setBackground(Color.GREEN);
 
          }
-     }
+
      //path around board
      for (int x = 3; x < 8; x++) {
 
