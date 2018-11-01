@@ -1,29 +1,25 @@
 import javax.swing.*;
 
-public class Players extends JFrame {
+public class Players{
     private String name;
-    private String colour;
     protected Token tokens;
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getColour() {
-        return colour;
+   public Players()
+   {
+       setName("unknown");
+   }
+    public Players(String name,Token tokens){
+        setName(name);
+
     }
 
-    public void setColour(String colour) {
-        this.colour = colour;
-    }
-    public Players(String name,String colour,Token tokens){
-        setName(name);
-        setColour(colour);
-    }
 }

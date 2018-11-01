@@ -7,6 +7,7 @@ import java.awt.*;
 public class Board extends JFrame implements Dice, Rules{
 
  public Board() {
+     setTitle("Ludo");
      setSize(1000, 1000);
      setLocation(500, 20);
      setDefaultCloseOperation(EXIT_ON_CLOSE);
