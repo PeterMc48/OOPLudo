@@ -19,6 +19,16 @@ public class Players{
    }
     public Players(String name,Token tokens){
         setName(name);
+        Token[] blueToken = new Token[3];
+        Token[] redToken = new Token[3];
+        Token[] greenToken = new Token[3];
+        Token[] pinkToken = new Token[3];
+
+        for(int i =0;i<blueToken.length;i++)
+        {
+            blueToken[i] = tokens;
+        }
+
 
     }
 

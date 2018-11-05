@@ -4,26 +4,30 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class Board extends JFrame implements Dice, Rules{
+public class Board extends JFrame{
 
  public Board() {
      setTitle("Ludo");
      setSize(1000, 1000);
      setLocation(500, 20);
      setDefaultCloseOperation(EXIT_ON_CLOSE);
+     Container pane = getContentPane();
+     pane.setLayout(new FlowLayout());
+
      JPanel panel = new JPanel();
      JLabel label = new JLabel();
 
-     setLayout(new GridLayout(11, 11));
+     panel.setLayout(new GridLayout(11, 11));
      //**2d array to go on the grid*/
      JLabel gridlayout[][] = new JLabel[11][11];
-
+    //panel.add(gridlayout);
      for (int row = 0; row < gridlayout.length; row++) {
          for (int col = 0; col < gridlayout.length; col++) {
              gridlayout[row][col] = new JLabel();
              gridlayout[row][col].setBorder(new LineBorder(Color.BLACK));
              gridlayout[row][col].setOpaque(true);
-             super.add(gridlayout[row][col]);
+
+             panel.add(gridlayout[row][col]);
 
 
          }
@@ -163,6 +167,40 @@ public class Board extends JFrame implements Dice, Rules{
      gridlayout[10][4].setFont(new Font("Monospaced",Font.ITALIC,15));
 
 
+     JButton dice = new JButton("roll dice");
+     //gridlayout[5][5].add(dice);
+     pane.add(panel);
+     pane.add(dice);
+    //blue tokens
+
+     JLabel x = new JLabel("roll dice");
+
+     ImageIcon image = new ImageIcon(getClass().getResource("blueIcon.png"));
+     x.setIcon(image);
+
+     pane.add(x);
+
+
+
+
+     ImageIcon blue = new ImageIcon(getClass().getResource("blueIcon.png"));
+     JButton blueToken1 = new JButton();
+     blueToken1.setIcon(blue);
+     pane.add(blueToken1);
+
+
+     JButton blueToken2 = new JButton();
+     JButton blueToken3 = new JButton();
+     JButton blueToken4 = new JButton();
+
+     gridlayout[2][2].add(blueToken1);
+     gridlayout[2][3].add(blueToken2);
+     gridlayout[3][2].add(blueToken3);
+     gridlayout[3][3].add(blueToken4);
+
+
+
+     //red tokens
 
 
 
@@ -174,8 +212,5 @@ public class Board extends JFrame implements Dice, Rules{
 
 
  }
-    @Override
-    public void RollDice() {
 
-    }
 }
