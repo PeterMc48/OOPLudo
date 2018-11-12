@@ -12,9 +12,9 @@ public class Token {
     {
         this.colour = colour;
     }
-    public Token()
-    {
-       setColour(colour);
+
+    public Token(String colour) {
+        setColour(colour);
     }
 
     @Override
