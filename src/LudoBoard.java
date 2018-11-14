@@ -4,33 +4,38 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class LudoBoard extends JFrame implements ActionListener {
     //no argument constractor
-    public LudoBoard()
-    {
+    /**
+     * Array of players to play the game
+     */
+    Player[] players;
+    boolean[] selected = {false, false, false, false};
+    //no argument constractor
+    public LudoBoard() {
+
         //JFrame attributes
-        setSize(1000,1000);
+        setSize(1000, 1000);
         setTitle("Ludo");
-        setLocation(500,20);
+        setLocation(500, 20);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         //JPanel object to go on top of the JFrame
-        JPanel gamepanel = new JPanel(new GridLayout(11,11));
+        JPanel gamepanel = new JPanel(new GridLayout(11, 11));
         //gamepanel.setLayout(new FlowLayout());
         add(gamepanel);
         //Game grid made of a 2d array of JLabels
         JPanel gameSquares[][] = new JPanel[11][11];
 
-        for(int row = 0;row<gameSquares.length;row++)
-        {
-            for(int col = 0;col<gameSquares.length;col++)
-        {
-            //boarder around each label
-            gameSquares[row][col] = new JPanel();
-            gameSquares[row][col].setBorder(new LineBorder(Color.BLACK));
-            gameSquares[row][col].setOpaque(true);
-            gamepanel.add(gameSquares[row][col]);
-        }
+        for (int row = 0; row < gameSquares.length; row++) {
+            for (int col = 0; col < gameSquares.length; col++) {
+                //boarder around each label
+                gameSquares[row][col] = new JPanel();
+                gameSquares[row][col].setBorder(new LineBorder(Color.BLACK));
+                gameSquares[row][col].setOpaque(true);
+                gamepanel.add(gameSquares[row][col]);
+            }
         }
         //Home space
         //blue
@@ -68,12 +73,10 @@ public class LudoBoard extends JFrame implements ActionListener {
 
         }
         //path around the board
-        for (int x = 3; x < 8; x++)
-        {
+        for (int x = 3; x < 8; x++) {
             gameSquares[x][0].setBackground(Color.white);
         }
-        for (int y = 0; y < 4; y++)
-        {
+        for (int y = 0; y < 4; y++) {
             gameSquares[3][y].setBackground(Color.white);
         }
         for (int x = 0; x < 4; x++) {
@@ -162,7 +165,7 @@ public class LudoBoard extends JFrame implements ActionListener {
         JButton blueToken1 = new JButton();
         blueToken1.setIcon(blueimage);
         blueToken1.addActionListener(this);
-        //blueToken1.setVisible(false);
+        blueToken1.setVisible(false);
         gameSquares[1][2].add(blueToken1);
         JButton blueToken2 = new JButton();
         blueToken2.setIcon(blueimage);
@@ -238,69 +241,130 @@ public class LudoBoard extends JFrame implements ActionListener {
         //Blue starting point
         JLabel blueStartingPoint = new JLabel();
         blueStartingPoint.setText("Start");
-        blueStartingPoint.setFont(new Font("MONOSPACED",Font.ITALIC,15));
+        blueStartingPoint.setFont(new Font("MONOSPACED", Font.ITALIC, 15));
         blueStartingPoint.setForeground(Color.BLUE);
         gameSquares[4][0].add(blueStartingPoint);
 
         //Red starting point
         JLabel redStartingPoint = new JLabel();
         redStartingPoint.setText("Start");
-        redStartingPoint.setFont(new Font("MONOSPACED",Font.ITALIC,15));
+        redStartingPoint.setFont(new Font("MONOSPACED", Font.ITALIC, 15));
         redStartingPoint.setForeground(Color.RED);
         gameSquares[0][6].add(redStartingPoint);
         //Green starting point
         JLabel greenStartingPoint = new JLabel();
         greenStartingPoint.setText("Start");
-        greenStartingPoint.setFont(new Font("MONOSPACED",Font.ITALIC,15));
+        greenStartingPoint.setFont(new Font("MONOSPACED", Font.ITALIC, 15));
         greenStartingPoint.setForeground(Color.green);
         gameSquares[6][10].add(greenStartingPoint);
 
         //Yellow starting point
         JLabel yellowStartingPoint = new JLabel();
         yellowStartingPoint.setText("Start");
-        yellowStartingPoint.setFont(new Font("MONOSPACED",Font.ITALIC,15));
+        yellowStartingPoint.setFont(new Font("MONOSPACED", Font.ITALIC, 15));
         yellowStartingPoint.setForeground(Color.yellow);
         gameSquares[10][4].add(yellowStartingPoint);
 
-        //mapping the path
 
+        PlayerMenu();
 
 
     }
-public void createLookUp()
-{
-    Position pos[] = {
-            new Position(0,4),new Position(0,3),new Position(1,3),new Position(2,3),
-            new Position(3,3),new Position(3,2),new Position(3,1),new Position(3,0),
-            new Position(4,0),new Position(5,0),new Position(6,0),new Position(7,0),
-            new Position(7,1),new Position(7,2),new Position(7,3),new Position(8,3),
-            new Position(9,3),new Position(10,3),new Position(10,4),new Position(10,5),
-            new Position(10,6),new Position(10,7),new Position(9,7),new Position(8,7),
-            new Position(7,7),new Position(7,8),new Position(7,9),new Position(7,10),
-            new Position(6,10),new Position(5,10),new Position(4,10),new Position(3,10),
-            new Position(3,9),new Position(3,8),new Position(3,7),new Position(2,7),
-            new Position(1,7),new Position(0,7),new Position(0,6),new Position(0,5)
+
+    public void createLookUp() {
+        Position pos[] = {
+                new Position(0, 4), new Position(0, 3), new Position(1, 3), new Position(2, 3),
+                new Position(3, 3), new Position(3, 2), new Position(3, 1), new Position(3, 0),
+                new Position(4, 0), new Position(5, 0), new Position(6, 0), new Position(7, 0),
+                new Position(7, 1), new Position(7, 2), new Position(7, 3), new Position(8, 3),
+                new Position(9, 3), new Position(10, 3), new Position(10, 4), new Position(10, 5),
+                new Position(10, 6), new Position(10, 7), new Position(9, 7), new Position(8, 7),
+                new Position(7, 7), new Position(7, 8), new Position(7, 9), new Position(7, 10),
+                new Position(6, 10), new Position(5, 10), new Position(4, 10), new Position(3, 10),
+                new Position(3, 9), new Position(3, 8), new Position(3, 7), new Position(2, 7),
+                new Position(1, 7), new Position(0, 7), new Position(0, 6), new Position(0, 5)
 
 
-    };
+        };
 
 
-   // Position pos[] = {0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,8,9,10,
-     //       10,10,10,10,9,8,7,7,7,7,6,5,4,3,3,3,3,2,1,0,0,0};
-    //int posY[] = {4,3,3,3,3,2,1,0,0,0,0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,
-      //      8,9,10,10,10,10,10,9,8,7,7,7,7,6,5};
-}
+        // Position pos[] = {0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,8,9,10,
+        //       10,10,10,10,9,8,7,7,7,7,6,5,4,3,3,3,3,2,1,0,0,0};
+        //int posY[] = {4,3,3,3,3,2,1,0,0,0,0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,
+        //      8,9,10,10,10,10,10,9,8,7,7,7,7,6,5};
+    }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Player players = new Player();
-        if (e.getActionCommand().equals("Roll Dice")){
+        if (e.getActionCommand().equals("Roll Dice")) {
 
             players.rolldice();
         }
-        if(e.getActionCommand().equals("blueIcon.png")){
+        if (e.getActionCommand().equals("blueIcon.png")) {
 
         }
     }
+    //get the amount of players and there names and colours
+    public void PlayerMenu() {
+
+
+        int index =0;
+
+        String name = "";
+        String colour = "";
+
+        int numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players: "));
+        while (numOfPlayers < 2 || numOfPlayers > 4) {
+            numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("Unable to play the game with that amount of players!! please have 2,3 or 4 players"));
+        }
+        players = new Player[numOfPlayers];
+
+        for (int i = 0; i < players.length; i++) {
+            name = JOptionPane.showInputDialog("Enter name");
+            colour = JOptionPane.showInputDialog("Choose colour");
+
+            if(colour.toUpperCase().equals("blue"))
+            {
+                index = 0;
+            }
+            else if(colour.toUpperCase().equals("red"))
+            {
+                index = 1;
+            }
+            else if(colour.toUpperCase().equals("green"))
+            {
+                index = 2;
+            }
+            else if(colour.toUpperCase().equals("yellow"))
+            {
+                index = 3;
+            }
+
+            while (selected[index]) {
+                colour = JOptionPane.showInputDialog("Already taken!! Please choice another");
+                if(colour.equals("blue"))
+                {
+                    index = 0;
+                }
+                else if(colour.toUpperCase().equals("red"))
+                {
+                    index = 1;
+                }
+                else if(colour.toUpperCase().equals("green"))
+                {
+                    index = 2;
+                }
+                else if(colour.toUpperCase().equals("yellow"))
+                {
+                    index = 3;
+                }
+            }
+            selected[index] = true;
+
+        }
+
+    }
 }
+
