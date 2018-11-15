@@ -11,6 +11,39 @@ public class LudoBoard extends JFrame implements ActionListener {
      * Array of players to play the game
      */
     Player[] players;
+    Token[] blueToken;
+    Token[] redToken;
+    Token[] greenToken;
+    Token[] yellowToken;
+
+    /**
+     * buttons to move tokens
+     */
+    //blue buttons
+    public JButton blueToken1;
+    public JButton blueToken2;
+    public JButton blueToken3;
+    public JButton blueToken4;
+
+    //red buttons
+    public JButton redToken1;
+    public JButton redToken2;
+    public JButton redToken3;
+    public JButton redToken4;
+
+    //green buttons
+    public JButton greenToken1;
+    public JButton greenToken2;
+    public JButton greenToken3;
+    public JButton greenToken4;
+
+    //yellow buttons
+    public JButton yellowToken1;
+    public JButton yellowToken2;
+    public JButton yellowToken3;
+    public JButton yellowToken4;
+
+
     boolean[] selected = {false, false, false, false};
     //no argument constractor
     public LudoBoard() {
@@ -162,77 +195,77 @@ public class LudoBoard extends JFrame implements ActionListener {
         //Adding tokens to board
         //blue tokens
         ImageIcon blueimage = new ImageIcon(getClass().getResource("blueIcon.png"));//https://www.kisspng.com/free/brik.html
-        JButton blueToken1 = new JButton();
+        blueToken1 = new JButton();
         blueToken1.setIcon(blueimage);
         blueToken1.addActionListener(this);
         blueToken1.setVisible(false);
         gameSquares[1][2].add(blueToken1);
-        JButton blueToken2 = new JButton();
+        blueToken2 = new JButton();
         blueToken2.setIcon(blueimage);
         blueToken2.addActionListener(this);
         blueToken2.setVisible(false);
         gameSquares[1][1].add(blueToken2);
-        JButton blueToken3 = new JButton();
+        blueToken3 = new JButton();
         blueToken3.setIcon(blueimage);
         blueToken3.addActionListener(this);
         blueToken3.setVisible(false);
         gameSquares[2][1].add(blueToken3);
-        JButton blueToken4 = new JButton();
+        blueToken4 = new JButton();
         blueToken4.setIcon(blueimage);
         blueToken4.addActionListener(this);
         blueToken4.setVisible(false);
         gameSquares[2][2].add(blueToken4);
         //red tokens
         ImageIcon redimage = new ImageIcon(getClass().getResource("redIcon.png"));//https://www.kisspng.com/free/brik.html
-        JButton redToken1 = new JButton();
+        redToken1 = new JButton();
         redToken1.setIcon(redimage);
         redToken1.setVisible(false);
         gameSquares[2][9].add(redToken1);
-        JButton redToken2 = new JButton();
+        redToken2 = new JButton();
         redToken2.setIcon(redimage);
         redToken2.setVisible(false);
         gameSquares[1][9].add(redToken2);
-        JButton redToken3 = new JButton();
+        redToken3 = new JButton();
         redToken3.setIcon(redimage);
         redToken3.setVisible(false);
         gameSquares[1][8].add(redToken3);
-        JButton redToken4 = new JButton();
+        redToken4 = new JButton();
         redToken4.setIcon(redimage);
         redToken4.setVisible(false);
         gameSquares[2][8].add(redToken4);
         //green tokens
         ImageIcon greenimage = new ImageIcon(getClass().getResource("greenIcon.png"));//https://www.kisspng.com/free/brik.html
-        JButton greenToken1 = new JButton();
+        greenToken1 = new JButton();
         greenToken1.setIcon(greenimage);
         greenToken1.setVisible(false);
         gameSquares[8][8].add(greenToken1);
-        JButton greenToken2 = new JButton();
+        greenToken2 = new JButton();
         greenToken2.setIcon(greenimage);
         greenToken2.setVisible(false);
         gameSquares[8][9].add(greenToken2);
-        JButton greenToken3 = new JButton();
+        greenToken3 = new JButton();
         greenToken3.setIcon(greenimage);
         greenToken3.setVisible(false);
         gameSquares[9][8].add(greenToken3);
-        JButton greenToken4 = new JButton();
+        greenToken4 = new JButton();
         greenToken4.setIcon(greenimage);
         greenToken4.setVisible(false);
         gameSquares[9][9].add(greenToken4);
         //yellow token
         ImageIcon yellowimage = new ImageIcon(getClass().getResource("yellowIcon.png"));//https://www.iconspng.com/image/118736/ludo-piece-mustard-yellow
-        JButton yellowToken1 = new JButton();
+        yellowToken1 = new JButton();
         yellowToken1.setIcon(yellowimage);
         yellowToken1.setVisible(false);
         gameSquares[9][1].add(yellowToken1);
-        JButton yellowToken2 = new JButton();
+        yellowToken2 = new JButton();
         yellowToken2.setIcon(yellowimage);
         yellowToken2.setVisible(false);
         gameSquares[9][2].add(yellowToken2);
-        JButton yellowToken3 = new JButton();
+        yellowToken3 = new JButton();
         yellowToken3.setIcon(yellowimage);
         yellowToken3.setVisible(false);
         gameSquares[8][1].add(yellowToken3);
-        JButton yellowToken4 = new JButton();
+        yellowToken4 = new JButton();
         yellowToken4.setIcon(yellowimage);
         yellowToken4.setVisible(false);
         gameSquares[8][2].add(yellowToken4);
@@ -287,22 +320,50 @@ public class LudoBoard extends JFrame implements ActionListener {
 
         };
 
+        Position blueHome[] = {
+                new Position(1, 2), new Position(1, 1), new Position(2, 1), new Position(2, 2)
+        };
+        Position redHome[] = {
+                new Position(2, 9), new Position(1, 9), new Position(1, 8), new Position(2, 8)
+        };
+        Position greenHome[] = {
+                new Position(8, 8), new Position(8, 9), new Position(9, 8), new Position(9, 9)
+        };
+        Position yellowHome[] = {
+                new Position(9, 1), new Position(9, 2), new Position(8, 1), new Position(8, 2)
+        };
+
+        Position bluePathHome[] = {
+                new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
+        };
+        Position redPathHome[] = {
+                new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
+        };
+        Position greenPathHome[] = {
+                new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
+        };
+        Position yellowPathHome[] = {
+                new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
+        };
+
+    }
 
         // Position pos[] = {0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,8,9,10,
         //       10,10,10,10,9,8,7,7,7,7,6,5,4,3,3,3,3,2,1,0,0,0};
         //int posY[] = {4,3,3,3,3,2,1,0,0,0,0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,
         //      8,9,10,10,10,10,10,9,8,7,7,7,7,6,5};
-    }
 
 
+//player rolling the dices
     @Override
     public void actionPerformed(ActionEvent e) {
-        Player players = new Player();
-        if (e.getActionCommand().equals("Roll Dice")) {
 
-            players.rolldice();
+        if (e.getActionCommand().equals("Roll Dice")){
+
+            new Player(getName()).rolldice();
+
         }
-        if (e.getActionCommand().equals("blueIcon.png")) {
+        if (e.getActionCommand().equals(blueToken1)) {
 
         }
     }
@@ -310,7 +371,7 @@ public class LudoBoard extends JFrame implements ActionListener {
     public void PlayerMenu() {
 
 
-        int index =0;
+        int index =5;
 
         String name = "";
         String colour = "";
@@ -322,49 +383,90 @@ public class LudoBoard extends JFrame implements ActionListener {
         players = new Player[numOfPlayers];
 
         for (int i = 0; i < players.length; i++) {
-            name = JOptionPane.showInputDialog("Enter name");
-            colour = JOptionPane.showInputDialog("Choose colour");
+            name = JOptionPane.showInputDialog("Please enter your name");
+            colour = JOptionPane.showInputDialog("Please choose a colour: blue, red, green or yellow");
 
-            if(colour.toUpperCase().equals("blue"))
+            if(colour.toUpperCase().equals("BLUE"))
             {
                 index = 0;
+                blueToken1.setVisible(true);
+                blueToken2.setVisible(true);
+                blueToken3.setVisible(true);
+                blueToken4.setVisible(true);
+
             }
-            else if(colour.toUpperCase().equals("red"))
+            else if(colour.toUpperCase().equals("RED"))
             {
                 index = 1;
+                redToken1.setVisible(true);
+                redToken2.setVisible(true);
+                redToken3.setVisible(true);
+                redToken4.setVisible(true);
             }
-            else if(colour.toUpperCase().equals("green"))
+            else if(colour.toUpperCase().equals("GREEN"))
             {
                 index = 2;
+                greenToken1.setVisible(true);
+                greenToken2.setVisible(true);
+                greenToken3.setVisible(true);
+                greenToken4.setVisible(true);
             }
-            else if(colour.toUpperCase().equals("yellow"))
+            else if(colour.toUpperCase().equals("YELLOW"))
             {
                 index = 3;
+                yellowToken1.setVisible(true);
+                yellowToken2.setVisible(true);
+                yellowToken3.setVisible(true);
+                yellowToken4.setVisible(true);
             }
 
             while (selected[index]) {
                 colour = JOptionPane.showInputDialog("Already taken!! Please choice another");
-                if(colour.equals("blue"))
+                if(colour.equals("BLUE"))
                 {
                     index = 0;
+                    blueToken1.setVisible(true);
+                    blueToken2.setVisible(true);
+                    blueToken3.setVisible(true);
+                    blueToken4.setVisible(true);
                 }
-                else if(colour.toUpperCase().equals("red"))
+                else if(colour.toUpperCase().equals("RED"))
                 {
                     index = 1;
+                    redToken1.setVisible(true);
+                    redToken2.setVisible(true);
+                    redToken3.setVisible(true);
+                    redToken4.setVisible(true);
                 }
-                else if(colour.toUpperCase().equals("green"))
+                else if(colour.toUpperCase().equals("GREEN"))
                 {
                     index = 2;
+                    greenToken1.setVisible(true);
+                    greenToken2.setVisible(true);
+                    greenToken3.setVisible(true);
+                    greenToken4.setVisible(true);
                 }
-                else if(colour.toUpperCase().equals("yellow"))
+                else if(colour.toUpperCase().equals("YELLOW"))
                 {
                     index = 3;
+                    yellowToken1.setVisible(true);
+                    yellowToken2.setVisible(true);
+                    yellowToken3.setVisible(true);
+                    yellowToken4.setVisible(true);
                 }
             }
             selected[index] = true;
+           players[i] = (new Player(name));
 
         }
 
+
     }
+    //put the player with its tokens
+    public void getPlayersTokens()
+    {
+        
+    }
+
 }
 
