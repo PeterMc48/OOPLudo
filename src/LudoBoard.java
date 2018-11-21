@@ -3,50 +3,110 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 
 
 public class LudoBoard extends JFrame implements ActionListener {
-    //no argument constractor
-    /**
-     * Array of players to play the game
-     */
+
     Player[] players;
-    Token[] blueToken;
-    Token[] redToken;
-    Token[] greenToken;
-    Token[] yellowToken;
+    Token[] blueTokens;
+    Token[] redTokens;
+    Token[] greenTokens;
+    Token[] yellowTokens;
 
     /**
      * buttons to move tokens
      */
     //blue buttons
-    public JButton blueToken1;
-    public JButton blueToken2;
-    public JButton blueToken3;
-    public JButton blueToken4;
+
+    public Token blueToken1; //JB Modified Code here - changed all tokens from JButton to Token objects
+    public Token blueToken2;
+    public Token blueToken3;
+    public Token blueToken4;
 
     //red buttons
-    public JButton redToken1;
-    public JButton redToken2;
-    public JButton redToken3;
-    public JButton redToken4;
+
+    public Token redToken1;
+    public Token redToken2;
+    public Token redToken3;
+    public Token redToken4;
 
     //green buttons
-    public JButton greenToken1;
-    public JButton greenToken2;
-    public JButton greenToken3;
-    public JButton greenToken4;
+
+    public Token greenToken1;
+    public Token greenToken2;
+    public Token greenToken3;
+    public Token greenToken4;
 
     //yellow buttons
-    public JButton yellowToken1;
-    public JButton yellowToken2;
-    public JButton yellowToken3;
-    public JButton yellowToken4;
 
+    public Token yellowToken1;
+    public Token yellowToken2;
+    public Token yellowToken3;
+    public Token yellowToken4;
 
+    //dice button
+    public JButton rollDice;
+
+    //game squaures
+    public JPanel gameSquares[][];
+
+    //turn over
+    public boolean turnOver = false;
+
+    //to move the index of the array for the positioning
+    public int moveIndex;
+
+    //lookup positions on the board
+    public Position pos[] = {
+            new Position(4, 0), new Position(3, 0), new Position(3, 1), new Position(3, 2),
+            new Position(3, 3), new Position(2, 3), new Position(1, 3), new Position(0, 3),
+            new Position(0, 4), new Position(0, 5), new Position(0, 6), new Position(0, 7),
+            new Position(1, 7), new Position(2, 7), new Position(3, 7), new Position(3, 8),
+            new Position(3, 9), new Position(3, 10), new Position(4, 10), new Position(4, 10),
+            new Position(6, 10), new Position(7, 10), new Position(7, 9), new Position(7, 8),
+            new Position(7, 7), new Position(8, 7), new Position(9, 7), new Position(10, 7),
+            new Position(10, 6), new Position(10, 5), new Position(10, 4), new Position(10, 3),
+            new Position(9, 3), new Position(8, 3), new Position(7, 3), new Position(7, 2),
+            new Position(7, 1), new Position(7, 0), new Position(6, 0), new Position(5, 0)
+    };
+    public Position blueHome[] = {
+            new Position(1, 1), new Position(1, 2), new Position(2, 1), new Position(2, 2)
+    };
+    public Position redHome[] = {
+            new Position(1, 8), new Position(1, 9), new Position(2, 8), new Position(2, 9)
+    };
+    public Position greenHome[] = {
+            new Position(8, 8), new Position(8, 9), new Position(9, 8), new Position(9, 9)
+    };
+    public Position yellowHome[] = {
+            new Position(8, 1), new Position(8, 2), new Position(9, 1), new Position(9, 2)
+    };
+    //path to win game
+    public Position bluePathHome[] = {
+            new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
+    };
+    public Position redPathHome[] = {
+            new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
+    };
+    public Position greenPathHome[] = {
+            new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
+    };
+    public Position yellowPathHome[] = {
+            new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
+    };
+    //boolean array to check if a colour is already taken
     boolean[] selected = {false, false, false, false};
+    //an int to count the number of players playing the game
+    private int numOfPlayers =0;
+    //to count though the array of players
+    private int countPlayers =0;
+
+
+
     //no argument constractor
     public LudoBoard() {
+
 
         //JFrame attributes
         setSize(1000, 1000);
@@ -59,7 +119,7 @@ public class LudoBoard extends JFrame implements ActionListener {
         //gamepanel.setLayout(new FlowLayout());
         add(gamepanel);
         //Game grid made of a 2d array of JLabels
-        JPanel gameSquares[][] = new JPanel[11][11];
+        gameSquares = new JPanel[11][11];
 
         for (int row = 0; row < gameSquares.length; row++) {
             for (int col = 0; col < gameSquares.length; col++) {
@@ -188,88 +248,95 @@ public class LudoBoard extends JFrame implements ActionListener {
         }
 
         //Roll Dice Button
-        JButton rollDice = new JButton("Roll Dice");
+        rollDice = new JButton("Roll Dice");
         gameSquares[5][5].add(rollDice);
         rollDice.addActionListener(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //Adding tokens to board
         //blue tokens
         ImageIcon blueimage = new ImageIcon(getClass().getResource("blueIcon.png"));//https://www.kisspng.com/free/brik.html
-        blueToken1 = new JButton();
+        blueToken1 = new Token("blue");
         blueToken1.setIcon(blueimage);
         blueToken1.addActionListener(this);
         blueToken1.setVisible(false);
         gameSquares[1][2].add(blueToken1);
-        blueToken2 = new JButton();
+        blueToken2 = new Token("blue");
         blueToken2.setIcon(blueimage);
         blueToken2.addActionListener(this);
         blueToken2.setVisible(false);
         gameSquares[1][1].add(blueToken2);
-        blueToken3 = new JButton();
+        blueToken3 = new Token("blue");
         blueToken3.setIcon(blueimage);
         blueToken3.addActionListener(this);
         blueToken3.setVisible(false);
         gameSquares[2][1].add(blueToken3);
-        blueToken4 = new JButton();
+        blueToken4 = new Token("blue");
         blueToken4.setIcon(blueimage);
         blueToken4.addActionListener(this);
         blueToken4.setVisible(false);
         gameSquares[2][2].add(blueToken4);
+
+        blueTokens = new Token[]{blueToken1,blueToken2,blueToken3,blueToken4};
         //red tokens
         ImageIcon redimage = new ImageIcon(getClass().getResource("redIcon.png"));//https://www.kisspng.com/free/brik.html
-        redToken1 = new JButton();
+        redToken1 = new Token("red");
         redToken1.setIcon(redimage);
         redToken1.setVisible(false);
         gameSquares[2][9].add(redToken1);
-        redToken2 = new JButton();
+        redToken2 = new Token("red");
         redToken2.setIcon(redimage);
         redToken2.setVisible(false);
         gameSquares[1][9].add(redToken2);
-        redToken3 = new JButton();
+        redToken3 = new Token("red");
         redToken3.setIcon(redimage);
         redToken3.setVisible(false);
         gameSquares[1][8].add(redToken3);
-        redToken4 = new JButton();
+        redToken4 = new Token("red");
         redToken4.setIcon(redimage);
         redToken4.setVisible(false);
         gameSquares[2][8].add(redToken4);
+
+        redTokens = new Token[]{redToken1,redToken2,redToken3,redToken4};
         //green tokens
         ImageIcon greenimage = new ImageIcon(getClass().getResource("greenIcon.png"));//https://www.kisspng.com/free/brik.html
-        greenToken1 = new JButton();
+        greenToken1 = new Token("green");
         greenToken1.setIcon(greenimage);
         greenToken1.setVisible(false);
         gameSquares[8][8].add(greenToken1);
-        greenToken2 = new JButton();
+        greenToken2 = new Token("green");
         greenToken2.setIcon(greenimage);
         greenToken2.setVisible(false);
         gameSquares[8][9].add(greenToken2);
-        greenToken3 = new JButton();
+        greenToken3 = new Token("green");
         greenToken3.setIcon(greenimage);
         greenToken3.setVisible(false);
         gameSquares[9][8].add(greenToken3);
-        greenToken4 = new JButton();
+        greenToken4 = new Token("green");
         greenToken4.setIcon(greenimage);
         greenToken4.setVisible(false);
         gameSquares[9][9].add(greenToken4);
+
+        greenTokens = new Token[]{greenToken1,greenToken2,greenToken3,greenToken4};
         //yellow token
         ImageIcon yellowimage = new ImageIcon(getClass().getResource("yellowIcon.png"));//https://www.iconspng.com/image/118736/ludo-piece-mustard-yellow
-        yellowToken1 = new JButton();
+        yellowToken1 = new Token("yellow");
         yellowToken1.setIcon(yellowimage);
         yellowToken1.setVisible(false);
         gameSquares[9][1].add(yellowToken1);
-        yellowToken2 = new JButton();
+        yellowToken2 = new Token("yellow");
         yellowToken2.setIcon(yellowimage);
         yellowToken2.setVisible(false);
         gameSquares[9][2].add(yellowToken2);
-        yellowToken3 = new JButton();
+        yellowToken3 = new Token("yellow");
         yellowToken3.setIcon(yellowimage);
         yellowToken3.setVisible(false);
         gameSquares[8][1].add(yellowToken3);
-        yellowToken4 = new JButton();
+        yellowToken4 = new Token("yellow");
         yellowToken4.setIcon(yellowimage);
         yellowToken4.setVisible(false);
         gameSquares[8][2].add(yellowToken4);
 
+        yellowTokens = new Token[]{yellowToken1,yellowToken2,yellowToken3,yellowToken4};
 
         //Blue starting point
         JLabel blueStartingPoint = new JLabel();
@@ -299,173 +366,197 @@ public class LudoBoard extends JFrame implements ActionListener {
         gameSquares[10][4].add(yellowStartingPoint);
 
 
-        PlayerMenu();
 
 
-    }
-
-    public void createLookUp() {
-        Position pos[] = {
-                new Position(0, 4), new Position(0, 3), new Position(1, 3), new Position(2, 3),
-                new Position(3, 3), new Position(3, 2), new Position(3, 1), new Position(3, 0),
-                new Position(4, 0), new Position(5, 0), new Position(6, 0), new Position(7, 0),
-                new Position(7, 1), new Position(7, 2), new Position(7, 3), new Position(8, 3),
-                new Position(9, 3), new Position(10, 3), new Position(10, 4), new Position(10, 5),
-                new Position(10, 6), new Position(10, 7), new Position(9, 7), new Position(8, 7),
-                new Position(7, 7), new Position(7, 8), new Position(7, 9), new Position(7, 10),
-                new Position(6, 10), new Position(5, 10), new Position(4, 10), new Position(3, 10),
-                new Position(3, 9), new Position(3, 8), new Position(3, 7), new Position(2, 7),
-                new Position(1, 7), new Position(0, 7), new Position(0, 6), new Position(0, 5)
-
-
-        };
-
-        Position blueHome[] = {
-                new Position(1, 2), new Position(1, 1), new Position(2, 1), new Position(2, 2)
-        };
-        Position redHome[] = {
-                new Position(2, 9), new Position(1, 9), new Position(1, 8), new Position(2, 8)
-        };
-        Position greenHome[] = {
-                new Position(8, 8), new Position(8, 9), new Position(9, 8), new Position(9, 9)
-        };
-        Position yellowHome[] = {
-                new Position(9, 1), new Position(9, 2), new Position(8, 1), new Position(8, 2)
-        };
-
-        Position bluePathHome[] = {
-                new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
-        };
-        Position redPathHome[] = {
-                new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
-        };
-        Position greenPathHome[] = {
-                new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
-        };
-        Position yellowPathHome[] = {
-                new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
-        };
+        setHomePos();
+        playerMenu();
 
     }
-
-        // Position pos[] = {0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,8,9,10,
-        //       10,10,10,10,9,8,7,7,7,7,6,5,4,3,3,3,3,2,1,0,0,0};
-        //int posY[] = {4,3,3,3,3,2,1,0,0,0,0,0,1,2,3,3,3,3,4,5,6,7,7,7,7,
-        //      8,9,10,10,10,10,10,9,8,7,7,7,7,6,5};
-
-
-//player rolling the dices
+    //player rolling the dices
     @Override
     public void actionPerformed(ActionEvent e) {
+        Player player = new Player();
 
-        if (e.getActionCommand().equals("Roll Dice")){
+        //roll dice button pushed
+        if (e.getSource() == rollDice) {
+            int roll = players[countPlayers].rolldice();
+            //the player rolling the dice
+            //players[countPlayers].rolldice();
 
-            new Player(getName()).rolldice();
+            //if the colour matches the player
+            if(players[countPlayers].getTokens().equals(blueTokens)){
 
-        }
-        if (e.getActionCommand().equals(blueToken1)) {
-
-        }
-    }
-    //get the amount of players and there names and colours
-    public void PlayerMenu() {
-
-
-        int index =5;
-
-        String name = "";
-        String colour = "";
-
-        int numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players: "));
-        while (numOfPlayers < 2 || numOfPlayers > 4) {
-            numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("Unable to play the game with that amount of players!! please have 2,3 or 4 players"));
-        }
-        players = new Player[numOfPlayers];
-
-        for (int i = 0; i < players.length; i++) {
-            name = JOptionPane.showInputDialog("Please enter your name");
-            colour = JOptionPane.showInputDialog("Please choose a colour: blue, red, green or yellow");
-
-            if(colour.toUpperCase().equals("BLUE"))
-            {
-                index = 0;
-                blueToken1.setVisible(true);
-                blueToken2.setVisible(true);
-                blueToken3.setVisible(true);
-                blueToken4.setVisible(true);
-
-            }
-            else if(colour.toUpperCase().equals("RED"))
-            {
-                index = 1;
-                redToken1.setVisible(true);
-                redToken2.setVisible(true);
-                redToken3.setVisible(true);
-                redToken4.setVisible(true);
-            }
-            else if(colour.toUpperCase().equals("GREEN"))
-            {
-                index = 2;
-                greenToken1.setVisible(true);
-                greenToken2.setVisible(true);
-                greenToken3.setVisible(true);
-                greenToken4.setVisible(true);
-            }
-            else if(colour.toUpperCase().equals("YELLOW"))
-            {
-                index = 3;
-                yellowToken1.setVisible(true);
-                yellowToken2.setVisible(true);
-                yellowToken3.setVisible(true);
-                yellowToken4.setVisible(true);
-            }
-
-            while (selected[index]) {
-                colour = JOptionPane.showInputDialog("Already taken!! Please choice another");
-                if(colour.equals("BLUE"))
+                if(e.getSource() == blueToken1)
                 {
-                    index = 0;
-                    blueToken1.setVisible(true);
-                    blueToken2.setVisible(true);
-                    blueToken3.setVisible(true);
-                    blueToken4.setVisible(true);
+                    if (roll == 6 && ((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY()))) {
+
+                        moveFromHome();
+                        repaint();
+                    } else if (roll <= 6 && ((blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY()))) {
+                        int x;
+                        int y;
+
+                        moveIndex += roll;
+                        if (moveIndex <= 39) {
+                            x = pos[moveIndex].getX();
+                            System.out.println(x + " " + moveIndex);
+                            y = pos[moveIndex].getY();
+                            System.out.println(y + " " + moveIndex);
+                            blueToken1.setPos(pos[moveIndex]);
+                            System.out.println(blueToken1.toString());
+                            gameSquares[x][y].add(blueToken1);
+                            repaint();
+                        } else if (moveIndex <= 43) {
+                            x = bluePathHome[moveIndex - 40].getX();
+                            y = bluePathHome[moveIndex - 40].getY();
+                            blueToken1.setPos(bluePathHome[moveIndex]);
+                            gameSquares[x][y].add(blueToken1);
+                            repaint();
+                        } else
+                            JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
+
+
+                        //repaint();
+                    } else
+                        JOptionPane.showMessageDialog(null, players[countPlayers].getName() + "cant move sorry");
                 }
-                else if(colour.toUpperCase().equals("RED"))
-                {
-                    index = 1;
-                    redToken1.setVisible(true);
-                    redToken2.setVisible(true);
-                    redToken3.setVisible(true);
-                    redToken4.setVisible(true);
-                }
-                else if(colour.toUpperCase().equals("GREEN"))
-                {
-                    index = 2;
-                    greenToken1.setVisible(true);
-                    greenToken2.setVisible(true);
-                    greenToken3.setVisible(true);
-                    greenToken4.setVisible(true);
-                }
-                else if(colour.toUpperCase().equals("YELLOW"))
-                {
-                    index = 3;
-                    yellowToken1.setVisible(true);
-                    yellowToken2.setVisible(true);
-                    yellowToken3.setVisible(true);
-                    yellowToken4.setVisible(true);
+                turnOver = true;
+            }
+                countPlayers++;
+                if (countPlayers >= numOfPlayers) {
+                    countPlayers = 0;
                 }
             }
-            selected[index] = true;
-           players[i] = (new Player(name));
-
         }
+        public void playerMenu() {
+            //get the amount of players and there names and colours
+
+                int selectedindex = 5;
+
+                String name = "";
+                String colour = "";
+
+                numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("How many players: "));
+                while (numOfPlayers < 2 || numOfPlayers > 4) {
+                    numOfPlayers = Integer.parseInt(JOptionPane.showInputDialog("Unable to play the game with that amount of players!! please have 2,3 or 4 players"));
+                }
+                players = new Player[numOfPlayers];
+
+                for (int i = 0; i < players.length; i++) {
+                    name = JOptionPane.showInputDialog("Please enter your name");
+                    colour = JOptionPane.showInputDialog("Please choose a colour: blue, red, green or yellow").toLowerCase();
+
+                    //JB Code Added here to loop while the colour value is bad for validation purposes
+
+                    while (!colour.equals("blue") && !colour.equals("red") && !colour.equals("green") && !colour.equals("yellow"))
+                        colour = JOptionPane.showInputDialog("Incorrect colour value - must be blue, red, green or yellow").toLowerCase();
+
+                    if (colour.equals("blue")) {
+                        selectedindex = 0;
+                        blueToken1.setVisible(true);
+                        blueToken2.setVisible(true);
+                        blueToken3.setVisible(true);
+                        blueToken4.setVisible(true);
+                        players[i] = new Player(name, false, 0, blueTokens); //JB Added Code to construct Person object and link with their tokens
+
+                    } else if (colour.equals("red")) {
+                        selectedindex = 1;
+                        redToken1.setVisible(true);
+                        redToken2.setVisible(true);
+                        redToken3.setVisible(true);
+                        redToken4.setVisible(true);
+                        players[i] = new Player(name, false, 0, redTokens); //JB Added Code to construct Person object and link with their tokens
+                    } else if (colour.equals("green")) {
+                        selectedindex = 2;
+                        greenToken1.setVisible(true);
+                        greenToken2.setVisible(true);
+                        greenToken3.setVisible(true);
+                        greenToken4.setVisible(true);
+                        players[i] = new Player(name, false, 0, greenTokens); //JB Added Code to construct Person object and link with their tokens
+                    } else if (colour.equals("yellow")) {
+                        selectedindex = 3;
+                        yellowToken1.setVisible(true);
+                        yellowToken2.setVisible(true);
+                        yellowToken3.setVisible(true);
+                        yellowToken4.setVisible(true);
+                        players[i] = new Player(name, false, 0, yellowTokens); //JB Added Code to construct Person object and link with their tokens
+                    }
+
+                    while (selected[selectedindex]) {
+                        colour = JOptionPane.showInputDialog("Already taken!! Please choice another").toLowerCase();
+
+                        //JB Code Added here to loop while the colour value is bad for validation purposes
+
+                        while (!colour.equals("blue") && !colour.equals("red") && !colour.equals("green") && !colour.equals("yellow"))
+                            colour = JOptionPane.showInputDialog("Incorrect colour value - must be blue, red, green or yellow").toLowerCase();
 
 
-    }
-    //put the player with its tokens
-    public void getPlayersTokens()
+                        if (colour.equals("blue")) {
+                            selectedindex = 0;
+                            blueToken1.setVisible(true);
+                            blueToken2.setVisible(true);
+                            blueToken3.setVisible(true);
+                            blueToken4.setVisible(true);
+                            players[i] = new Player(name, false, 0, blueTokens); //JB Added Code to construct Person object and link with their tokens
+
+                        } else if (colour.equals("red")) {
+                            selectedindex = 1;
+                            redToken1.setVisible(true);
+                            redToken2.setVisible(true);
+                            redToken3.setVisible(true);
+                            redToken4.setVisible(true);
+                            players[i] = new Player(name, false, 0, redTokens); //JB Added Code to construct Person object and link with their tokens
+                        } else if (colour.equals("green")) {
+                            selectedindex = 2;
+                            greenToken1.setVisible(true);
+                            greenToken2.setVisible(true);
+                            greenToken3.setVisible(true);
+                            greenToken4.setVisible(true);
+                            players[i] = new Player(name, false, 0, greenTokens); //JB Added Code to construct Person object and link with their tokens
+                        } else if (colour.equals("yellow")) {
+                            selectedindex = 3;
+                            yellowToken1.setVisible(true);
+                            yellowToken2.setVisible(true);
+                            yellowToken3.setVisible(true);
+                            yellowToken4.setVisible(true);
+                            players[i] = new Player(name, false, 0, yellowTokens); //JB Added Code to construct Person object and link with their tokens
+                        }
+                    }
+                    selected[selectedindex] = true;
+                }
+            }
+
+    void setHomePos()
     {
-        
+        blueToken1.setPos(blueHome[0]);
+        blueToken2.setPos(blueHome[1]);
+        blueToken3.setPos(blueHome[2]);
+        blueToken4.setPos(blueHome[3]);
+
+        redToken1.setPos(redHome[0]);
+        redToken2.setPos(redHome[1]);
+        redToken3.setPos(redHome[2]);
+        redToken4.setPos(redHome[3]);
+
+        greenToken1.setPos(greenHome[0]);
+        greenToken2.setPos(greenHome[1]);
+        greenToken3.setPos(greenHome[2]);
+        greenToken4.setPos(greenHome[3]);
+
+        yellowToken1.setPos(yellowHome[0]);
+        yellowToken2.setPos(yellowHome[1]);
+        yellowToken3.setPos(yellowHome[2]);
+        yellowToken4.setPos(yellowHome[3]);
+    }
+    Component moveFromHome()
+    {
+        if(blueToken1.getPos().getX() == blueHome[0].getX() && blueToken1.getPos().getY() == blueHome[0].getY())
+        {
+            gameSquares[pos[0].getX()][pos[0].getY()].add(blueToken1);
+            blueToken1.setPos(pos[0]);
+        }
+        return gameSquares[pos[0].getX()][pos[0].getY()].add(blueToken1);
+
     }
 
 }
