@@ -18,64 +18,61 @@ public class LudoBoard extends JFrame implements ActionListener {
      */
     //blue buttons
 
-    public Token blueToken1; //JB Modified Code here - changed all tokens from JButton to Token objects //i changed all the JButtons to JLabels
-    public Token blueToken2;
-    public Token blueToken3;
-    public Token blueToken4;
+    private Token blueToken1; //JB Modified Code here - changed all tokens from JButton to Token objects //i changed all the JButtons to JLabels
+    private Token blueToken2;
+    private Token blueToken3;
+    private Token blueToken4;
 
     //red buttons
 
-    public Token redToken1;
-    public Token redToken2;
-    public Token redToken3;
-    public Token redToken4;
+    private Token redToken1;
+    private Token redToken2;
+    private Token redToken3;
+    private Token redToken4;
 
     //green buttons
 
-    public Token greenToken1;
-    public Token greenToken2;
-    public Token greenToken3;
-    public Token greenToken4;
+    private Token greenToken1;
+    private Token greenToken2;
+    private Token greenToken3;
+    private Token greenToken4;
 
     //yellow buttons
 
-    public Token yellowToken1;
-    public Token yellowToken2;
-    public Token yellowToken3;
-    public Token yellowToken4;
+    private Token yellowToken1;
+    private Token yellowToken2;
+    private Token yellowToken3;
+    private Token yellowToken4;
 
     //dice button
-    public JButton rollDice;
+    private JButton rollDice;
 
     //game squaures
-    public JPanel gameSquares[][];
-
-    //turn over
-    public boolean turnOver = false;
+    private JPanel gameSquares[][];
 
     //to move the index of the array for the positioning
-    public int moveIndexblue1;
-    public int moveIndexblue2;
-    public int moveIndexblue3;
-    public int moveIndexblue4;
+    private int moveIndexblue1;
+    private int moveIndexblue2;
+    private int moveIndexblue3;
+    private int moveIndexblue4;
 
-    public int moveIndexred1;
-    public int moveIndexred2;
-    public int moveIndexred3;
-    public int moveIndexred4;
+    private int moveIndexred1;
+    private int moveIndexred2;
+    private int moveIndexred3;
+    private int moveIndexred4;
 
-    public int moveIndexgreen1;
-    public int moveIndexgreen2;
-    public int moveIndexgreen3;
-    public int moveIndexgreen4;
+    private int moveIndexgreen1;
+    private int moveIndexgreen2;
+    private int moveIndexgreen3;
+    private int moveIndexgreen4;
 
-    public int moveIndexyellow1;
-    public int moveIndexyellow2;
-    public int moveIndexyellow3;
-    public int moveIndexyellow4;
+    private int moveIndexyellow1;
+    private int moveIndexyellow2;
+    private int moveIndexyellow3;
+    private int moveIndexyellow4;
 
     //lookup positions on the board
-    public Position bluepos[] = {
+    private Position bluepos[] = {
             new Position(4, 0), new Position(3, 0), new Position(3, 1), new Position(3, 2),
             new Position(3, 3), new Position(2, 3), new Position(1, 3), new Position(0, 3),
             new Position(0, 4), new Position(0, 5), new Position(0, 6), new Position(0, 7),
@@ -87,7 +84,7 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(9, 3), new Position(8, 3), new Position(7, 3), new Position(7, 2),
             new Position(7, 1), new Position(7, 0), new Position(6, 0), new Position(5, 0)
     };
-    public Position redpos[] = {
+    private Position redpos[] = {
             new Position(0,6),new Position(0, 7),new Position(1, 7), new Position(2, 7),
             new Position(3, 7), new Position(3, 8),new Position(3, 9), new Position(3, 10),
             new Position(4, 10), new Position(5, 10),new Position(6, 10), new Position(7, 10),
@@ -99,7 +96,7 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(3, 1), new Position(3, 2),new Position(3, 3), new Position(2, 3),
             new Position(1, 3), new Position(0, 3),new Position(0, 4), new Position(0, 5)
     };
-    public Position greenpos[] = {
+    private Position greenpos[] = {
             new Position(6, 10), new Position(7, 10), new Position(7, 9), new Position(7, 8),
             new Position(7, 7), new Position(8, 7), new Position(9, 7), new Position(10, 7),
             new Position(10, 6), new Position(10, 5), new Position(10, 4), new Position(10, 3),
@@ -112,7 +109,7 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(3, 9), new Position(3, 10),new Position(4, 10), new Position(5, 10)
 
     };
-    public Position yellowpos[] = {
+    private Position yellowpos[] = {
             new Position(10, 4), new Position(10, 3),new Position(9, 3), new Position(8, 3),
             new Position(7, 3), new Position(7, 2),new Position(7, 1), new Position(7, 0),
             new Position(6, 0), new Position(5, 0),new Position(4, 0), new Position(3, 0),
@@ -124,44 +121,56 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(7, 9), new Position(7, 8),new Position(7, 7), new Position(8, 7),
             new Position(9, 7), new Position(10, 7),new Position(10, 6), new Position(10, 5)
     };
-    public Position blueHome[] = {
+    private Position blueHome[] = {
             new Position(1, 1), new Position(1, 2), new Position(2, 1), new Position(2, 2)
     };
-    public Position redHome[] = {
+    private Position redHome[] = {
             new Position(1, 8), new Position(1, 9), new Position(2, 8), new Position(2, 9)
     };
-    public Position greenHome[] = {
+    private Position greenHome[] = {
             new Position(8, 8), new Position(8, 9), new Position(9, 8), new Position(9, 9)
     };
-    public Position yellowHome[] = {
+    private Position yellowHome[] = {
             new Position(8, 1), new Position(8, 2), new Position(9, 1), new Position(9, 2)
     };
     //path to win game
-    public Position bluePathHome[] = {
+    private Position bluePathHome[] = {
             new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
     };
-    public Position redPathHome[] = {
+    private Position redPathHome[] = {
             new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
     };
-    public Position greenPathHome[] = {
+    private Position greenPathHome[] = {
             new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
     };
-    public Position yellowPathHome[] = {
+    private Position yellowPathHome[] = {
             new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
     };
     //boolean array to check if a colour is already taken
-    boolean[] selected = {false, false, false, false};
+    private boolean[] selected = {false, false, false, false};
     //an int to count the number of players playing the game
     private int numOfPlayers = 0;
     //to count though the array of players
     private int countPlayers = 0;
+    //menuBar
+    private JMenuBar menuBar = new JMenuBar();
+    //menu items
+    private JButton newGame = new JButton("New Game");
+    private JButton HighScore = new JButton("HighScore");
+
 
 
     //no argument constractor
     public LudoBoard() {
 
+        Container cPane;
+        cPane = getContentPane();
 
+        setJMenuBar(menuBar);
+        menuBar.add(newGame);
+        menuBar.add(HighScore);
 
+        newGame.addActionListener(this);
         //JFrame attributes
         setSize(1000, 1000);
         setTitle("Ludo");
@@ -431,14 +440,13 @@ public class LudoBoard extends JFrame implements ActionListener {
         yellowStartingPoint.setForeground(Color.yellow);
         gameSquares[10][4].add(yellowStartingPoint);
 
-        playerMenu();
+
         setHomePos();
 
 
 
 
     }
-
     //player rolling the dices
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -470,7 +478,81 @@ public class LudoBoard extends JFrame implements ActionListener {
                         if (((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY()))) {
                             moveBlue1FromHome();
                             repaint();
-
+                            //if blue token 1 lands on the same spot as red tokens, the red token goes back home
+                            if(blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY())
+                            {
+                                redToken1.setPos(redHome[0]);
+                                moveIndexred1 =0;
+                                gameSquares[redHome[0].getX()][redHome[0].getY()].add(redToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY())
+                            {
+                                redToken2.setPos(redHome[1]);
+                                moveIndexred2 =0;
+                                gameSquares[redHome[1].getX()][redHome[1].getY()].add(redToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY())
+                            {
+                                redToken3.setPos(redHome[2]);
+                                moveIndexred3 =0;
+                                gameSquares[redHome[2].getX()][redHome[2].getY()].add(redToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY())
+                            {
+                                redToken4.setPos(redHome[3]);
+                                moveIndexred4 =0;
+                                gameSquares[redHome[3].getX()][redHome[3].getY()].add(redToken4);
+                            }
+                            //if blue token 1 lands on the same spot as green tokens, the green token goes back home
+                            else if(blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY())
+                            {
+                                greenToken1.setPos(greenHome[0]);
+                                moveIndexgreen1 =0;
+                                gameSquares[greenHome[0].getX()][greenHome[0].getY()].add(greenToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY())
+                            {
+                                greenToken2.setPos(greenHome[1]);
+                                moveIndexgreen2 =0;
+                                gameSquares[greenHome[1].getX()][greenHome[1].getY()].add(greenToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY())
+                            {
+                                greenToken3.setPos(greenHome[2]);
+                                moveIndexgreen3 =0;
+                                gameSquares[greenHome[2].getX()][greenHome[2].getY()].add(greenToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY())
+                            {
+                                greenToken4.setPos(greenHome[3]);
+                                moveIndexgreen4 =0;
+                                gameSquares[greenHome[3].getX()][greenHome[3].getY()].add(greenToken4);
+                            }
+                            //if blue token 1 lands on the same spot as yellow tokens, the yellow token goes back home
+                            else if(blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY())
+                            {
+                                yellowToken1.setPos(yellowHome[0]);
+                                moveIndexyellow1 =0;
+                                gameSquares[yellowHome[0].getX()][yellowHome[0].getY()].add(yellowToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY())
+                            {
+                                yellowToken2.setPos(yellowHome[1]);
+                                moveIndexyellow2 =0;
+                                gameSquares[yellowHome[1].getX()][yellowHome[1].getY()].add(yellowToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY())
+                            {
+                                yellowToken3.setPos(yellowHome[2]);
+                                moveIndexyellow3 =0;
+                                gameSquares[yellowHome[2].getX()][yellowHome[2].getY()].add(yellowToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY())
+                            {
+                                yellowToken4.setPos(yellowHome[3]);
+                                moveIndexyellow4 =0;
+                                gameSquares[yellowHome[3].getX()][yellowHome[3].getY()].add(yellowToken4);
+                            }
 
                         } else if (((blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY()))) {
                             int x;
@@ -486,6 +568,81 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken1);
                                 repaint();
+                            }
+                            //if blue token 1 lands on the same spot as red tokens, the red token goes back home
+                            if(blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY())
+                            {
+                                redToken1.setPos(redHome[0]);
+                                moveIndexred1 =0;
+                                gameSquares[redHome[0].getX()][redHome[0].getY()].add(redToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY())
+                            {
+                                redToken2.setPos(redHome[1]);
+                                moveIndexred2 =0;
+                                gameSquares[redHome[1].getX()][redHome[1].getY()].add(redToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY())
+                            {
+                                redToken3.setPos(redHome[2]);
+                                moveIndexred3 =0;
+                                gameSquares[redHome[2].getX()][redHome[2].getY()].add(redToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY())
+                            {
+                                redToken4.setPos(redHome[3]);
+                                moveIndexred4 =0;
+                                gameSquares[redHome[3].getX()][redHome[3].getY()].add(redToken4);
+                            }
+                            //if blue token 1 lands on the same spot as green tokens, the green token goes back home
+                            else if(blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY())
+                            {
+                                greenToken1.setPos(greenHome[0]);
+                                moveIndexgreen1 =0;
+                                gameSquares[greenHome[0].getX()][greenHome[0].getY()].add(greenToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY())
+                            {
+                                greenToken2.setPos(greenHome[1]);
+                                moveIndexgreen2 =0;
+                                gameSquares[greenHome[1].getX()][greenHome[1].getY()].add(greenToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY())
+                            {
+                                greenToken3.setPos(greenHome[2]);
+                                moveIndexgreen3 =0;
+                                gameSquares[greenHome[2].getX()][greenHome[2].getY()].add(greenToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY())
+                            {
+                                greenToken4.setPos(greenHome[3]);
+                                moveIndexgreen4 =0;
+                                gameSquares[greenHome[3].getX()][greenHome[3].getY()].add(greenToken4);
+                            }
+                            //if blue token 1 lands on the same spot as yellow tokens, the yellow token goes back home
+                            else if(blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY())
+                            {
+                                yellowToken1.setPos(yellowHome[0]);
+                                moveIndexyellow1 =0;
+                                gameSquares[yellowHome[0].getX()][yellowHome[0].getY()].add(yellowToken1);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY())
+                            {
+                                yellowToken2.setPos(yellowHome[1]);
+                                moveIndexyellow2 =0;
+                                gameSquares[yellowHome[1].getX()][yellowHome[1].getY()].add(yellowToken2);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY())
+                            {
+                                yellowToken3.setPos(yellowHome[2]);
+                                moveIndexyellow3 =0;
+                                gameSquares[yellowHome[2].getX()][yellowHome[2].getY()].add(yellowToken3);
+                            }
+                            else if(blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY())
+                            {
+                                yellowToken4.setPos(yellowHome[3]);
+                                moveIndexyellow4 =0;
+                                gameSquares[yellowHome[3].getX()][yellowHome[3].getY()].add(yellowToken4);
                             }
 
                         }
@@ -1679,12 +1836,40 @@ public class LudoBoard extends JFrame implements ActionListener {
             }
 
         }
+        //add player
+        if(e.getSource() == newGame)
+        {
+            playerMenu();
+        }
+        if(e.getSource() == HighScore)
+        {
+            getHighScores(players);
+        }
+    }
+    public void getHighScores(Player[] player)
+    {
+        JTextArea textArea = new JTextArea("HighScores");
+        Font font = new Font("monospaced",Font.PLAIN,12);
+        textArea.setFont(font);
+        textArea.setSize(200,200);
+
+        String text = "";
+        int temp =0;
+        for(Player p:players)
+        {
+            if(p.getWins() < p.getWins())
+            {
+                text += players+". "  + p.toString() + "\n";
+            }
+        }
+
+        textArea.append(text);
     }
 
 
 
 
-        public void playerMenu() {
+    public void playerMenu() {
             //get the amount of players and there names and colours
 
                 int selectedindex = 5;
