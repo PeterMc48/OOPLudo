@@ -3,11 +3,13 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
 
 
 public class LudoBoard extends JFrame implements ActionListener {
 
-    Player[] players;
+    public Player[] players;
     Token[] blueTokens;
     Token[] redTokens;
     Token[] greenTokens;
@@ -82,7 +84,8 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(7, 7), new Position(8, 7), new Position(9, 7), new Position(10, 7),
             new Position(10, 6), new Position(10, 5), new Position(10, 4), new Position(10, 3),
             new Position(9, 3), new Position(8, 3), new Position(7, 3), new Position(7, 2),
-            new Position(7, 1), new Position(7, 0), new Position(6, 0), new Position(5, 0)
+            new Position(7, 1), new Position(7, 0), new Position(6, 0), new Position(5, 0),
+            new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
     };
     private Position redpos[] = {
             new Position(0,6),new Position(0, 7),new Position(1, 7), new Position(2, 7),
@@ -94,7 +97,8 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(7, 3), new Position(7, 2),new Position(7, 1), new Position(7, 0),
             new Position(6, 0), new Position(5, 0),new Position(4, 0), new Position(3, 0),
             new Position(3, 1), new Position(3, 2),new Position(3, 3), new Position(2, 3),
-            new Position(1, 3), new Position(0, 3),new Position(0, 4), new Position(0, 5)
+            new Position(1, 3), new Position(0, 3),new Position(0, 4), new Position(0, 5),
+            new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
     };
     private Position greenpos[] = {
             new Position(6, 10), new Position(7, 10), new Position(7, 9), new Position(7, 8),
@@ -106,7 +110,8 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(3, 3), new Position(2, 3), new Position(1, 3), new Position(0, 3),
             new Position(0, 4), new Position(0, 5),new Position(0,6),new Position(0, 7),
             new Position(1, 7), new Position(2, 7),new Position(3, 7), new Position(3, 8),
-            new Position(3, 9), new Position(3, 10),new Position(4, 10), new Position(5, 10)
+            new Position(3, 9), new Position(3, 10),new Position(4, 10), new Position(5, 10),
+            new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
 
     };
     private Position yellowpos[] = {
@@ -119,7 +124,8 @@ public class LudoBoard extends JFrame implements ActionListener {
             new Position(3, 7), new Position(3, 8),new Position(3, 9), new Position(3, 10),
             new Position(4, 10), new Position(4, 10),new Position(6, 10), new Position(7, 10),
             new Position(7, 9), new Position(7, 8),new Position(7, 7), new Position(8, 7),
-            new Position(9, 7), new Position(10, 7),new Position(10, 6), new Position(10, 5)
+            new Position(9, 7), new Position(10, 7),new Position(10, 6), new Position(10, 5),
+            new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
     };
     private Position blueHome[] = {
             new Position(1, 1), new Position(1, 2), new Position(2, 1), new Position(2, 2)
@@ -133,19 +139,7 @@ public class LudoBoard extends JFrame implements ActionListener {
     private Position yellowHome[] = {
             new Position(8, 1), new Position(8, 2), new Position(9, 1), new Position(9, 2)
     };
-    //path to win game
-    private Position bluePathHome[] = {
-            new Position(5, 1), new Position(5, 2), new Position(5, 3), new Position(5, 4)
-    };
-    private Position redPathHome[] = {
-            new Position(1, 5), new Position(2, 5), new Position(3, 5), new Position(4, 5)
-    };
-    private Position greenPathHome[] = {
-            new Position(5, 6), new Position(5, 7), new Position(5, 8), new Position(5, 9)
-    };
-    private Position yellowPathHome[] = {
-            new Position(6, 5), new Position(7, 5), new Position(8, 5), new Position(9, 5)
-    };
+
     //boolean array to check if a colour is already taken
     private boolean[] selected = {false, false, false, false};
     //an int to count the number of players playing the game
@@ -171,6 +165,7 @@ public class LudoBoard extends JFrame implements ActionListener {
         menuBar.add(HighScore);
 
         newGame.addActionListener(this);
+        HighScore.addActionListener(this);
         //JFrame attributes
         setSize(1000, 1000);
         setTitle("Ludo");
@@ -462,104 +457,76 @@ public class LudoBoard extends JFrame implements ActionListener {
 
             //if the colour matches the player
             if (players[countPlayers].getTokens().equals(blueTokens)) {
-                while((roll == 6)){ /*&& ((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY())) ||
-                        ((blueToken2.getPos().getX() == blueHome[1].getX()) && (blueToken2.getPos().getY() == blueHome[1].getY())) ||
-                        ((blueToken3.getPos().getX() == blueHome[2].getX()) && (blueToken3.getPos().getY() == blueHome[2].getY())) ||
-                        ((blueToken4.getPos().getX() == blueHome[3].getX()) && (blueToken4.getPos().getY() == blueHome[3].getY()))) {*/
+                while ((roll == 6)) {
 
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
 
                     while (!chooseToken.equals("blue1") && !chooseToken.equals("blue2") && !chooseToken.equals("blue3") && !chooseToken.equals("blue4")) {
                         chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
                     }
-                    //switch (chooseToken) {
-                    //  case "blue1":
                     if (chooseToken.equals("blue1")) {
                         if (((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY()))) {
                             moveBlue1FromHome();
                             repaint();
-                            //if blue token 1 lands on the same spot as red tokens, the red token goes back home
-                            if(blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY())
-                            {
-                                redToken1.setPos(redHome[0]);
-                                moveIndexred1 =0;
-                                gameSquares[redHome[0].getX()][redHome[0].getY()].add(redToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY())
-                            {
-                                redToken2.setPos(redHome[1]);
-                                moveIndexred2 =0;
-                                gameSquares[redHome[1].getX()][redHome[1].getY()].add(redToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY())
-                            {
-                                redToken3.setPos(redHome[2]);
-                                moveIndexred3 =0;
-                                gameSquares[redHome[2].getX()][redHome[2].getY()].add(redToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY())
-                            {
-                                redToken4.setPos(redHome[3]);
-                                moveIndexred4 =0;
-                                gameSquares[redHome[3].getX()][redHome[3].getY()].add(redToken4);
-                            }
-                            //if blue token 1 lands on the same spot as green tokens, the green token goes back home
-                            else if(blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY())
-                            {
-                                greenToken1.setPos(greenHome[0]);
-                                moveIndexgreen1 =0;
-                                gameSquares[greenHome[0].getX()][greenHome[0].getY()].add(greenToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY())
-                            {
-                                greenToken2.setPos(greenHome[1]);
-                                moveIndexgreen2 =0;
-                                gameSquares[greenHome[1].getX()][greenHome[1].getY()].add(greenToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY())
-                            {
-                                greenToken3.setPos(greenHome[2]);
-                                moveIndexgreen3 =0;
-                                gameSquares[greenHome[2].getX()][greenHome[2].getY()].add(greenToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY())
-                            {
-                                greenToken4.setPos(greenHome[3]);
-                                moveIndexgreen4 =0;
-                                gameSquares[greenHome[3].getX()][greenHome[3].getY()].add(greenToken4);
-                            }
-                            //if blue token 1 lands on the same spot as yellow tokens, the yellow token goes back home
-                            else if(blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY())
-                            {
-                                yellowToken1.setPos(yellowHome[0]);
-                                moveIndexyellow1 =0;
-                                gameSquares[yellowHome[0].getX()][yellowHome[0].getY()].add(yellowToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY())
-                            {
-                                yellowToken2.setPos(yellowHome[1]);
-                                moveIndexyellow2 =0;
-                                gameSquares[yellowHome[1].getX()][yellowHome[1].getY()].add(yellowToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY())
-                            {
-                                yellowToken3.setPos(yellowHome[2]);
-                                moveIndexyellow3 =0;
-                                gameSquares[yellowHome[2].getX()][yellowHome[2].getY()].add(yellowToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY())
-                            {
-                                yellowToken4.setPos(yellowHome[3]);
-                                moveIndexyellow4 =0;
-                                gameSquares[yellowHome[3].getX()][yellowHome[3].getY()].add(yellowToken4);
-                            }
-
+                        }
+                        if (blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY()) {
+                            redToken1.setPos(redHome[0]);
+                            moveIndexred1 = 0;
+                            gameSquares[redHome[0].getX()][redHome[0].getY()].add(redToken1);
+                        } else if (blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY()) {
+                            redToken2.setPos(redHome[1]);
+                            moveIndexred2 = 0;
+                            gameSquares[redHome[1].getX()][redHome[1].getY()].add(redToken2);
+                        } else if (blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY()) {
+                            redToken3.setPos(redHome[2]);
+                            moveIndexred3 = 0;
+                            gameSquares[redHome[2].getX()][redHome[2].getY()].add(redToken3);
+                        } else if (blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY()) {
+                            redToken4.setPos(redHome[3]);
+                            moveIndexred4 = 0;
+                            gameSquares[redHome[3].getX()][redHome[3].getY()].add(redToken4);
+                        }
+                        //if blue token 1 lands on the same spot as green tokens, the green token goes back home
+                        else if (blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY()) {
+                            greenToken1.setPos(greenHome[0]);
+                            moveIndexgreen1 = 0;
+                            gameSquares[greenHome[0].getX()][greenHome[0].getY()].add(greenToken1);
+                        } else if (blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY()) {
+                            greenToken2.setPos(greenHome[1]);
+                            moveIndexgreen2 = 0;
+                            gameSquares[greenHome[1].getX()][greenHome[1].getY()].add(greenToken2);
+                        } else if (blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY()) {
+                            greenToken3.setPos(greenHome[2]);
+                            moveIndexgreen3 = 0;
+                            gameSquares[greenHome[2].getX()][greenHome[2].getY()].add(greenToken3);
+                        } else if (blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY()) {
+                            greenToken4.setPos(greenHome[3]);
+                            moveIndexgreen4 = 0;
+                            gameSquares[greenHome[3].getX()][greenHome[3].getY()].add(greenToken4);
+                        }
+                        //if blue token 1 lands on the same spot as yellow tokens, the yellow token goes back home
+                        else if (blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY()) {
+                            yellowToken1.setPos(yellowHome[0]);
+                            moveIndexyellow1 = 0;
+                            gameSquares[yellowHome[0].getX()][yellowHome[0].getY()].add(yellowToken1);
+                        } else if (blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY()) {
+                            yellowToken2.setPos(yellowHome[1]);
+                            moveIndexyellow2 = 0;
+                            gameSquares[yellowHome[1].getX()][yellowHome[1].getY()].add(yellowToken2);
+                        } else if (blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY()) {
+                            yellowToken3.setPos(yellowHome[2]);
+                            moveIndexyellow3 = 0;
+                            gameSquares[yellowHome[2].getX()][yellowHome[2].getY()].add(yellowToken3);
+                        } else if (blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY()) {
+                            yellowToken4.setPos(yellowHome[3]);
+                            moveIndexyellow4 = 0;
+                            gameSquares[yellowHome[3].getX()][yellowHome[3].getY()].add(yellowToken4);
                         } else if (((blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY()))) {
                             int x;
                             int y;
 
                             moveIndexblue1 += roll;
-                            if (moveIndexblue1 <= 39) {
+                            if (moveIndexblue1 < 44) {
                                 x = bluepos[moveIndexblue1].getX();
                                 System.out.println(x + " " + moveIndexblue1);
                                 y = bluepos[moveIndexblue1].getY();
@@ -568,87 +535,66 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken1);
                                 repaint();
+                            } else {
+                                moveIndexblue1 = moveIndexblue1 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
                             }
                             //if blue token 1 lands on the same spot as red tokens, the red token goes back home
-                            if(blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY())
-                            {
+                            if (blueToken1.getPos().getX() == redToken1.getPos().getX() && blueToken1.getPos().getY() == redToken1.getPos().getY()) {
                                 redToken1.setPos(redHome[0]);
-                                moveIndexred1 =0;
+                                moveIndexred1 = 0;
                                 gameSquares[redHome[0].getX()][redHome[0].getY()].add(redToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == redToken2.getPos().getX() && blueToken1.getPos().getY() == redToken2.getPos().getY()) {
                                 redToken2.setPos(redHome[1]);
-                                moveIndexred2 =0;
+                                moveIndexred2 = 0;
                                 gameSquares[redHome[1].getX()][redHome[1].getY()].add(redToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == redToken3.getPos().getX() && blueToken1.getPos().getY() == redToken3.getPos().getY()) {
                                 redToken3.setPos(redHome[2]);
-                                moveIndexred3 =0;
+                                moveIndexred3 = 0;
                                 gameSquares[redHome[2].getX()][redHome[2].getY()].add(redToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == redToken4.getPos().getX() && blueToken1.getPos().getY() == redToken4.getPos().getY()) {
                                 redToken4.setPos(redHome[3]);
-                                moveIndexred4 =0;
+                                moveIndexred4 = 0;
                                 gameSquares[redHome[3].getX()][redHome[3].getY()].add(redToken4);
                             }
                             //if blue token 1 lands on the same spot as green tokens, the green token goes back home
-                            else if(blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY())
-                            {
+                            else if (blueToken1.getPos().getX() == greenToken1.getPos().getX() && blueToken1.getPos().getY() == greenToken1.getPos().getY()) {
                                 greenToken1.setPos(greenHome[0]);
-                                moveIndexgreen1 =0;
+                                moveIndexgreen1 = 0;
                                 gameSquares[greenHome[0].getX()][greenHome[0].getY()].add(greenToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == greenToken2.getPos().getX() && blueToken1.getPos().getY() == greenToken2.getPos().getY()) {
                                 greenToken2.setPos(greenHome[1]);
-                                moveIndexgreen2 =0;
+                                moveIndexgreen2 = 0;
                                 gameSquares[greenHome[1].getX()][greenHome[1].getY()].add(greenToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == greenToken3.getPos().getX() && blueToken1.getPos().getY() == greenToken3.getPos().getY()) {
                                 greenToken3.setPos(greenHome[2]);
-                                moveIndexgreen3 =0;
+                                moveIndexgreen3 = 0;
                                 gameSquares[greenHome[2].getX()][greenHome[2].getY()].add(greenToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == greenToken4.getPos().getX() && blueToken1.getPos().getY() == greenToken4.getPos().getY()) {
                                 greenToken4.setPos(greenHome[3]);
-                                moveIndexgreen4 =0;
+                                moveIndexgreen4 = 0;
                                 gameSquares[greenHome[3].getX()][greenHome[3].getY()].add(greenToken4);
                             }
                             //if blue token 1 lands on the same spot as yellow tokens, the yellow token goes back home
-                            else if(blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY())
-                            {
+                            else if (blueToken1.getPos().getX() == yellowToken1.getPos().getX() && blueToken1.getPos().getY() == yellowToken1.getPos().getY()) {
                                 yellowToken1.setPos(yellowHome[0]);
-                                moveIndexyellow1 =0;
+                                moveIndexyellow1 = 0;
                                 gameSquares[yellowHome[0].getX()][yellowHome[0].getY()].add(yellowToken1);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == yellowToken2.getPos().getX() && blueToken1.getPos().getY() == yellowToken2.getPos().getY()) {
                                 yellowToken2.setPos(yellowHome[1]);
-                                moveIndexyellow2 =0;
+                                moveIndexyellow2 = 0;
                                 gameSquares[yellowHome[1].getX()][yellowHome[1].getY()].add(yellowToken2);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == yellowToken3.getPos().getX() && blueToken1.getPos().getY() == yellowToken3.getPos().getY()) {
                                 yellowToken3.setPos(yellowHome[2]);
-                                moveIndexyellow3 =0;
+                                moveIndexyellow3 = 0;
                                 gameSquares[yellowHome[2].getX()][yellowHome[2].getY()].add(yellowToken3);
-                            }
-                            else if(blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY())
-                            {
+                            } else if (blueToken1.getPos().getX() == yellowToken4.getPos().getX() && blueToken1.getPos().getY() == yellowToken4.getPos().getY()) {
                                 yellowToken4.setPos(yellowHome[3]);
-                                moveIndexyellow4 =0;
+                                moveIndexyellow4 = 0;
                                 gameSquares[yellowHome[3].getX()][yellowHome[3].getY()].add(yellowToken4);
                             }
-
                         }
-                    }       //break;
-                    //case "blue2":
-                    else if (chooseToken.equals("blue2")) {
+                    } else if (chooseToken.equals("blue2")) {
                         if (((blueToken2.getPos().getX() == blueHome[1].getX()) && (blueToken2.getPos().getY() == blueHome[1].getY()))) {
                             moveBlue2FromHome();
                             repaint();
@@ -656,22 +602,23 @@ public class LudoBoard extends JFrame implements ActionListener {
                         } else if (((blueToken2.getPos().getX() != blueHome[1].getX()) && (blueToken2.getPos().getY() != blueHome[1].getY()))) {
                             int x;
                             int y;
-
                             moveIndexblue2 += roll;
-                            if (moveIndexblue2 <= 39) {
+
+                            if (moveIndexblue2 < 44) {
                                 x = bluepos[moveIndexblue2].getX();
-                                System.out.println(x + " " + moveIndexblue2);
+                                //System.out.println(x + " " + moveIndexblue2);
                                 y = bluepos[moveIndexblue2].getY();
-                                System.out.println(y + " " + moveIndexblue2);
+                                //System.out.println(y + " " + moveIndexblue2);
                                 blueToken2.setPos(bluepos[moveIndexblue2]);
-                                System.out.println(blueToken2.toString());
+                                //System.out.println(blueToken2.toString());
                                 gameSquares[x][y].add(blueToken2);
                                 repaint();
                             }
-
+                            else {
+                                moveIndexblue2 = moveIndexblue2 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-                        //       break;
-                        //   case "blue3":
                     } else if (chooseToken.equals("blue3")) {
                         if (((blueToken3.getPos().getX() == blueHome[2].getX()) && (blueToken3.getPos().getY() == blueHome[2].getY()))) {
                             moveBlue3FromHome();
@@ -680,264 +627,198 @@ public class LudoBoard extends JFrame implements ActionListener {
                         } else if (((blueToken3.getPos().getX() != blueHome[2].getX()) && (blueToken3.getPos().getY() != blueHome[2].getY()))) {
                             int x;
                             int y;
-
                             moveIndexblue3 += roll;
-                            if (moveIndexblue3 <= 39) {
+
+                            if (moveIndexblue3 < 44) {
                                 x = bluepos[moveIndexblue3].getX();
-                                System.out.println(x + " " + moveIndexblue3);
+                                //System.out.println(x + " " + moveIndexblue3);
                                 y = bluepos[moveIndexblue3].getY();
-                                System.out.println(y + " " + moveIndexblue3);
+                                //System.out.println(y + " " + moveIndexblue3);
                                 blueToken3.setPos(bluepos[moveIndexblue3]);
-                                System.out.println(blueToken3.toString());
+                                //System.out.println(blueToken3.toString());
                                 gameSquares[x][y].add(blueToken3);
                                 repaint();
                             }
-
+                            else {
+                                moveIndexblue3 = moveIndexblue3 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-                        //       break;
-                        //  case "blue4":
+
                     } else if (chooseToken.equals("blue4")) {
                         if (((blueToken4.getPos().getX() == blueHome[3].getX()) && (blueToken4.getPos().getY() == blueHome[3].getY()))) {
                             moveBlue4FromHome();
                             repaint();
-
                         } else if (((blueToken4.getPos().getX() != blueHome[3].getX()) && (blueToken4.getPos().getY() != blueHome[3].getY()))) {
                             int x;
                             int y;
-
                             moveIndexblue4 += roll;
-                            if (moveIndexblue4 <= 39) {
+
+                            if (moveIndexblue4 < 44) {
                                 x = bluepos[moveIndexblue4].getX();
-                                System.out.println(x + " " + moveIndexblue4);
+                                //System.out.println(x + " " + moveIndexblue4);
                                 y = bluepos[moveIndexblue4].getY();
-                                System.out.println(y + " " + moveIndexblue4);
+                                //System.out.println(y + " " + moveIndexblue4);
                                 blueToken4.setPos(bluepos[moveIndexblue4]);
-                                System.out.println(blueToken4.toString());
+                                //System.out.println(blueToken4.toString());
                                 gameSquares[x][y].add(blueToken4);
                                 repaint();
-
                             }
-
+                            else {
+                                moveIndexblue4 = moveIndexblue4 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-
                     }
                     roll = players[countPlayers].rolldice();
-                    // break;
-                    //default:
-                    //       JOptionPane.showMessageDialog(null, "Invalid Token choose");
                 }
+
 
                 if (roll < 6 && (blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY()) ||
                         (blueToken2.getPos().getX() != blueHome[1].getX()) && (blueToken2.getPos().getY() != blueHome[1].getY()) ||
                         (blueToken3.getPos().getX() != blueHome[2].getX()) && (blueToken3.getPos().getY() != blueHome[2].getY()) ||
                         (blueToken4.getPos().getX() != blueHome[3].getX()) && (blueToken4.getPos().getY() != blueHome[3].getY())) {
-                String chooseToken = JOptionPane.showInputDialog("please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
 
-                while (!chooseToken.equals("blue1") && !chooseToken.equals("blue2") && !chooseToken.equals("blue3") && !chooseToken.equals("blue4")) {
-                    chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
-                }
-                if (chooseToken.equals("blue1")) {
-                    if ((blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY())) {
-                        int x;
-                        int y;
+                    String chooseToken = JOptionPane.showInputDialog("please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
 
-                        moveIndexblue1 += roll;
-                        if (moveIndexblue1 <= 39) {
-                            x = bluepos[moveIndexblue1].getX();
-                            System.out.println(x + " " + moveIndexblue1);
-                            y = bluepos[moveIndexblue1].getY();
-                            System.out.println(y + " " + moveIndexblue1);
-                            blueToken1.setPos(bluepos[moveIndexblue1]);
-                            System.out.println(blueToken1.toString());
-                            gameSquares[x][y].add(blueToken1);
-                            repaint();
-                        } else if (moveIndexblue1 > 39 && moveIndexblue1 < 43) {
-                            x = bluePathHome[moveIndexblue1 - 40].getX();
-                            y = bluePathHome[moveIndexblue1 - 40].getY();
-                            blueToken1.setPos(bluePathHome[moveIndexblue1]);
-                            gameSquares[x][y].add(blueToken1);
-                            repaint();
-                        }
-                        else if(moveIndexblue1 >= 43)
-                        {
-                            moveIndexblue1 = moveIndexblue1 - roll;
-                            if(moveIndexblue1 <=39)
-                            {
-                                x = bluepos[moveIndexblue1 - 43].getX();
-                                y = bluepos[moveIndexblue1 - 43].getY();
+                    while (!chooseToken.equals("blue1") && !chooseToken.equals("blue2") && !chooseToken.equals("blue3") && !chooseToken.equals("blue4")) {
+                        chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move blue1,blue2,blue3,blue4").toLowerCase();
+                    }
+                    if (chooseToken.equals("blue1")) {
+                        if ((blueToken1.getPos().getX() != blueHome[0].getX()) && (blueToken1.getPos().getY() != blueHome[0].getY())) {
+                            int x;
+                            int y;
+
+                            moveIndexblue1 += roll;
+                            if (moveIndexblue1 < 44) {
+                                x = bluepos[moveIndexblue1].getX();
+                                //System.out.println(x + " " + moveIndexblue1);
+                                y = bluepos[moveIndexblue1].getY();
+                                //System.out.println(y + " " + moveIndexblue1);
                                 blueToken1.setPos(bluepos[moveIndexblue1]);
+                                //System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken1);
                                 repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
-                            else if(moveIndexblue1 >=40)
-                            {
-                                x = bluePathHome[moveIndexblue1 - 43].getX();
-                                y = bluePathHome[moveIndexblue1 - 43].getY();
-                                blueToken1.setPos(bluePathHome[moveIndexblue1]);
-                                gameSquares[x][y].add(blueToken1);
-                                repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
+                            } else
+                                moveIndexblue1 = moveIndexblue1 - roll;
+                            JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                         }
-                    } else
-                        JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
-                } else if (chooseToken.equals("blue2")) {
-                    if ((blueToken2.getPos().getX() != blueHome[1].getX()) && (blueToken2.getPos().getY() != blueHome[1].getY())) {
-                        int x;
-                        int y;
 
-                        moveIndexblue2 += roll;
-                        if (moveIndexblue2 <= 39) {
-                            x = bluepos[moveIndexblue2].getX();
-                            System.out.println(x + " " + moveIndexblue2);
-                            y = bluepos[moveIndexblue2].getY();
-                            System.out.println(y + " " + moveIndexblue2);
-                            blueToken2.setPos(bluepos[moveIndexblue2]);
-                            System.out.println(blueToken2.toString());
-                            gameSquares[x][y].add(blueToken2);
-                            repaint();
-                        } else if (moveIndexblue2 <= 43) {
-                            x = bluePathHome[moveIndexblue2 - 40].getX();
-                            y = bluePathHome[moveIndexblue2 - 40].getY();
-                            blueToken2.setPos(bluePathHome[moveIndexblue2]);
-                            gameSquares[x][y].add(blueToken2);
-                            repaint();
-                        }
-                        else if(moveIndexblue1 >= 43)
-                        {
-                            moveIndexblue2 = moveIndexblue2 - roll;
-                            if(moveIndexblue2 <=39)
-                            {
-                                x = bluepos[moveIndexblue2 - 43].getX();
-                                y = bluepos[moveIndexblue2 - 43].getY();
+                    } else if (chooseToken.equals("blue2")) {
+                        if ((blueToken2.getPos().getX() != blueHome[1].getX()) && (blueToken2.getPos().getY() != blueHome[1].getY())) {
+                            int x;
+                            int y;
+
+                            moveIndexblue2 += roll;
+                            if (moveIndexblue2 < 44) {
+                                x = bluepos[moveIndexblue2].getX();
+                                //System.out.println(x + " " + moveIndexblue1);
+                                y = bluepos[moveIndexblue2].getY();
+                                //System.out.println(y + " " + moveIndexblue1);
                                 blueToken2.setPos(bluepos[moveIndexblue2]);
+                                //System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken2);
                                 repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
-                            else if(moveIndexblue2 >=40)
-                            {
-                                x = bluePathHome[moveIndexblue2 - 43].getX();
-                                y = bluePathHome[moveIndexblue2 - 43].getY();
-                                blueToken2.setPos(bluePathHome[moveIndexblue2]);
-                                gameSquares[x][y].add(blueToken2);
-                                repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
+                            } else
+                                moveIndexblue2 = moveIndexblue2 - roll;
+                            JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                         }
-                    } else
-                        JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
-                } else if (chooseToken.equals("blue3")) {
-                    if ((blueToken3.getPos().getX() != blueHome[2].getX()) && (blueToken3.getPos().getY() != blueHome[2].getY())) {
-                        int x;
-                        int y;
+                    } else if (chooseToken.equals("blue3")) {
+                        if ((blueToken3.getPos().getX() != blueHome[2].getX()) && (blueToken3.getPos().getY() != blueHome[2].getY())) {
+                            int x;
+                            int y;
+                            moveIndexblue3 += roll;
+                            if (moveIndexblue3 < 44) {
 
-                        moveIndexblue3 += roll;
-                        if (moveIndexblue3 <= 39) {
-                            x = bluepos[moveIndexblue3].getX();
-                            System.out.println(x + " " + moveIndexblue3);
-                            y = bluepos[moveIndexblue3].getY();
-                            System.out.println(y + " " + moveIndexblue3);
-                            blueToken3.setPos(bluepos[moveIndexblue3]);
-                            System.out.println(blueToken3.toString());
-                            gameSquares[x][y].add(blueToken3);
-                            repaint();
-                        } else if (moveIndexblue3 <= 43) {
-                            x = bluePathHome[moveIndexblue3 - 40].getX();
-                            y = bluePathHome[moveIndexblue3 - 40].getY();
-                            blueToken3.setPos(bluePathHome[moveIndexblue3]);
-                            gameSquares[x][y].add(blueToken3);
-                            repaint();
-                        }
-                        else if(moveIndexblue3 >= 43)
-                        {
-                            moveIndexblue3 = moveIndexblue3 - roll;
-                            if(moveIndexblue3 <=39)
-                            {
-                                x = bluepos[moveIndexblue3 - 43].getX();
-                                y = bluepos[moveIndexblue3 - 43].getY();
+                                x = bluepos[moveIndexblue3].getX();
+                                //System.out.println(x + " " + moveIndexblue1);
+                                y = bluepos[moveIndexblue3].getY();
+                                //System.out.println(y + " " + moveIndexblue1);
                                 blueToken3.setPos(bluepos[moveIndexblue3]);
+                                //System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken3);
                                 repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
+                            } else {
+                                moveIndexblue3 = moveIndexblue3 - roll;
+                                JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                             }
-                            else if(moveIndexblue3 >=40)
-                            {
-                                x = bluePathHome[moveIndexblue3 - 43].getX();
-                                y = bluePathHome[moveIndexblue3 - 43].getY();
-                                blueToken3.setPos(bluePathHome[moveIndexblue3]);
-                                gameSquares[x][y].add(blueToken3);
-                                repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
-                        }
-                    } else
-                        JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
-                } else if (chooseToken.equals("blue4")) {
-                    if ((blueToken4.getPos().getX() != blueHome[3].getX()) && (blueToken4.getPos().getY() != blueHome[3].getY())) {
-                        int x;
-                        int y;
 
-                        moveIndexblue4 += roll;
-                        if (moveIndexblue4 <= 39) {
-                            x = bluepos[moveIndexblue4].getX();
-                            System.out.println(x + " " + moveIndexblue4);
-                            y = bluepos[moveIndexblue4].getY();
-                            System.out.println(y + " " + moveIndexblue4);
-                            blueToken4.setPos(bluepos[moveIndexblue4]);
-                            System.out.println(blueToken4.toString());
-                            gameSquares[x][y].add(blueToken4);
-                            repaint();
-                        } else if (moveIndexblue4 <= 43) {
-                            x = bluePathHome[moveIndexblue4 - 40].getX();
-                            y = bluePathHome[moveIndexblue4 - 40].getY();
-                            blueToken4.setPos(bluePathHome[moveIndexblue4]);
-                            gameSquares[x][y].add(blueToken4);
-                            repaint();
                         }
-                        else if(moveIndexblue4 >= 43)
-                        {
-                            moveIndexblue4 = moveIndexblue4 - roll;
-                            if(moveIndexblue4 <=39)
-                            {
-                                x = bluepos[moveIndexblue4 - 43].getX();
-                                y = bluepos[moveIndexblue4 - 43].getY();
+                    } else if (chooseToken.equals("blue4")) {
+                        if ((blueToken4.getPos().getX() != blueHome[3].getX()) && (blueToken4.getPos().getY() != blueHome[3].getY())) {
+                            int x;
+                            int y;
+                            moveIndexblue4 += roll;
+                            if (moveIndexblue4 < 44) {
+                                x = bluepos[moveIndexblue4].getX();
+                                //System.out.println(x + " " + moveIndexblue1);
+                                y = bluepos[moveIndexblue4].getY();
+                                //System.out.println(y + " " + moveIndexblue1);
                                 blueToken4.setPos(bluepos[moveIndexblue4]);
+                                //System.out.println(blueToken1.toString());
                                 gameSquares[x][y].add(blueToken4);
                                 repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
+                            } else {
+                                moveIndexblue4 = moveIndexblue4 - roll;
+                                JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
+
+                                //got code  here to save the winners details once the game is won: https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+                                try {
+                                    // write the objects i.e. the players to a file
+                                    objectOutputStream(players);
+                                    JOptionPane.showMessageDialog(null, "Writing to File");
+                                } catch (Exception e1) {
+                                    // error message if there is a problem with the write
+                                    JOptionPane.showMessageDialog(null, "Error saving the file!");
+                                }
                             }
-                            else if(moveIndexblue4 >=40)
-                            {
-                                x = bluePathHome[moveIndexblue4 - 43].getX();
-                                y = bluePathHome[moveIndexblue4 - 43].getY();
-                                blueToken4.setPos(bluePathHome[moveIndexblue4]);
-                                gameSquares[x][y].add(blueToken4);
-                                repaint();
-                                JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                            }
+
                         }
-                    } else
-                        JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                    }
+                }
+                if((blueToken1.getPos().getX() == bluepos[43].getX() && blueToken1.getPos().getY() == bluepos[43].getY()) ||
+                        (blueToken1.getPos().getX() == bluepos[42].getX() && blueToken1.getPos().getY() == bluepos[42].getY()) ||
+                        (blueToken1.getPos().getX() == bluepos[41].getX() && blueToken1.getPos().getY() == bluepos[41].getY()) ||
+                        (blueToken1.getPos().getX() == bluepos[40].getX() && blueToken1.getPos().getY() == bluepos[4].getY()) &&
+                                (blueToken2.getPos().getX() == bluepos[43].getX() && blueToken2.getPos().getY() == bluepos[43].getY()) ||
+                        (blueToken2.getPos().getX() == bluepos[42].getX() && blueToken2.getPos().getY() == bluepos[42].getY()) ||
+                        (blueToken2.getPos().getX() == bluepos[41].getX() && blueToken2.getPos().getY() == bluepos[41].getY()) ||
+                        (blueToken2.getPos().getX() == bluepos[40].getX() && blueToken2.getPos().getY() == bluepos[4].getY()) &&
+                                (blueToken3.getPos().getX() == bluepos[43].getX() && blueToken3.getPos().getY() == bluepos[43].getY()) ||
+                        (blueToken3.getPos().getX() == bluepos[42].getX() && blueToken3.getPos().getY() == bluepos[42].getY()) ||
+                        (blueToken3.getPos().getX() == bluepos[41].getX() && blueToken3.getPos().getY() == bluepos[41].getY()) ||
+                        (blueToken3.getPos().getX() == bluepos[40].getX() && blueToken3.getPos().getY() == bluepos[4].getY()) &&
+                                (blueToken4.getPos().getX() == bluepos[43].getX() && blueToken4.getPos().getY() == bluepos[43].getY()) ||
+                        (blueToken4.getPos().getX() == bluepos[42].getX() && blueToken4.getPos().getY() == bluepos[42].getY()) ||
+                        (blueToken4.getPos().getX() == bluepos[41].getX() && blueToken4.getPos().getY() == bluepos[41].getY()) ||
+                        (blueToken4.getPos().getX() == bluepos[40].getX() && blueToken4.getPos().getY() == bluepos[4].getY()))
+                {
+                    players[countPlayers].setWinner(true);
+                }
+                if(players[countPlayers].isWinner())
+                {
+                    players[countPlayers].setWins(players[countPlayers].getWins() +1);
+
+                    //got code  here to save the winners details once the game is won: https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+                    try {
+                        // write the objects i.e. the players to a file
+                        objectOutputStream(players);
+                        JOptionPane.showMessageDialog(null, "Writing to File");
+                    } catch (Exception e1) {
+                        // error message if there is a problem with the write
+                        JOptionPane.showMessageDialog(null, "Error saving the file!");
+                    }
                 }
             }
-            else
-                    JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
-            }
+
             if (players[countPlayers].getTokens().equals(redTokens)) {
-                while((roll == 6)){ /*&& ((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY())) ||
-                        ((blueToken2.getPos().getX() == blueHome[1].getX()) && (blueToken2.getPos().getY() == blueHome[1].getY())) ||
-                        ((blueToken3.getPos().getX() == blueHome[2].getX()) && (blueToken3.getPos().getY() == blueHome[2].getY())) ||
-                        ((blueToken4.getPos().getX() == blueHome[3].getX()) && (blueToken4.getPos().getY() == blueHome[3].getY()))) {*/
+                while ((roll == 6)) {
 
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move red1,red2,red3,red4").toLowerCase();
 
                     while (!chooseToken.equals("red1") && !chooseToken.equals("red2") && !chooseToken.equals("red3") && !chooseToken.equals("red4")) {
                         chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move red1,red2,red3,red4").toLowerCase();
                     }
-                    //switch (chooseToken) {
-                    //  case "blue1":
                     if (chooseToken.equals("red1")) {
                         if (((redToken1.getPos().getX() == redHome[0].getX()) && (redToken1.getPos().getY() == redHome[0].getY()))) {
                             movered1FromHome();
@@ -947,7 +828,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexred1 += roll;
-                            if (moveIndexred1 <= 39) {
+                            if (moveIndexred1 < 44) {
                                 x = redpos[moveIndexred1].getX();
                                 System.out.println(x + " " + moveIndexred1);
                                 y = redpos[moveIndexred1].getY();
@@ -957,10 +838,12 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 gameSquares[x][y].add(redToken1);
                                 repaint();
                             }
+                            else {
+                                moveIndexred1 = moveIndexred1 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-                    }       //break;
-                    //case "blue2":
-                    else if (chooseToken.equals("red2")) {
+                    } else if (chooseToken.equals("red2")) {
                         if (((redToken2.getPos().getX() == redHome[1].getX()) && (redToken2.getPos().getY() == redHome[1].getY()))) {
                             movered2FromHome();
                             repaint();
@@ -969,7 +852,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexred2 += roll;
-                            if (moveIndexred2 <= 39) {
+                            if (moveIndexred2 < 44) {
                                 x = redpos[moveIndexred2].getX();
                                 System.out.println(x + " " + moveIndexred2);
                                 y = redpos[moveIndexred2].getY();
@@ -979,9 +862,11 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 gameSquares[x][y].add(redToken2);
                                 repaint();
                             }
+                            else {
+                                moveIndexred2 = moveIndexred2 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-                        //       break;
-                        //   case "blue3":
                     } else if (chooseToken.equals("red3")) {
                         if (((redToken3.getPos().getX() == redHome[2].getX()) && (redToken3.getPos().getY() == redHome[2].getY()))) {
                             movered3FromHome();
@@ -991,7 +876,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexred3 += roll;
-                            if (moveIndexred3 <= 39) {
+                            if (moveIndexred3 < 44) {
                                 x = redpos[moveIndexred3].getX();
                                 System.out.println(x + " " + moveIndexred3);
                                 y = redpos[moveIndexred3].getY();
@@ -1001,9 +886,11 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 gameSquares[x][y].add(redToken3);
                                 repaint();
                             }
+                            else {
+                                moveIndexred3 = moveIndexred3 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
-                        //       break;
-                        //  case "blue4":
                     } else if (chooseToken.equals("red4")) {
                         if (((redToken4.getPos().getX() == redHome[3].getX()) && (redToken4.getPos().getY() == redHome[3].getY()))) {
                             movered4FromHome();
@@ -1013,7 +900,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexred4 += roll;
-                            if (moveIndexred4 <= 39) {
+                            if (moveIndexred4 < 44) {
                                 x = redpos[moveIndexred4].getX();
                                 System.out.println(x + " " + moveIndexred4);
                                 y = redpos[moveIndexred4].getY();
@@ -1023,18 +910,19 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 gameSquares[x][y].add(redToken4);
                                 repaint();
                             }
+                            else {
+                                moveIndexred4 = moveIndexred4 - roll;
+                                JOptionPane.showMessageDialog(null, "Cant move");
+                            }
                         }
                     }
                     roll = players[countPlayers].rolldice();
-                    // break;
-                    //default:
-                    //       JOptionPane.showMessageDialog(null, "Invalid Token choose");
                 }
-
                 if (roll < 6 && (redToken1.getPos().getX() != redHome[0].getX()) && (redToken1.getPos().getY() != redHome[0].getY()) ||
                         (redToken2.getPos().getX() != redHome[1].getX()) && (redToken2.getPos().getY() != redHome[1].getY()) ||
                         (redToken3.getPos().getX() != redHome[2].getX()) && (redToken3.getPos().getY() != redHome[2].getY()) ||
                         (redToken4.getPos().getX() != redHome[3].getX()) && (redToken4.getPos().getY() != redHome[3].getY())) {
+
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move red1,red2,red3,red4").toLowerCase();
 
                     while (!chooseToken.equals("red1") && !chooseToken.equals("red2") && !chooseToken.equals("red3") && !chooseToken.equals("red4")) {
@@ -1046,7 +934,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexred1 += roll;
-                            if (moveIndexred1 <= 39) {
+                            if (moveIndexred1 < 44) {
                                 x = redpos[moveIndexred1].getX();
                                 System.out.println(x + " " + moveIndexred1);
                                 y = redpos[moveIndexred1].getY();
@@ -1055,136 +943,59 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(redToken1.toString());
                                 gameSquares[x][y].add(redToken1);
                                 repaint();
-                            } else if (moveIndexred1 > 39 && moveIndexred1 < 43) {
-                                x = redPathHome[moveIndexred1 - 40].getX();
-                                y = redPathHome[moveIndexred1 - 40].getY();
-                                redToken1.setPos(redPathHome[moveIndexred1]);
-                                gameSquares[x][y].add(redToken1);
-                                repaint();
-                            }
-                            else if(moveIndexred1 >= 43)
-                            {
+                            } else {
                                 moveIndexred1 = moveIndexred1 - roll;
-                                if(moveIndexred1 <=39)
-                                {
-                                    x = redpos[moveIndexred1 - 43].getX();
-                                    y = redpos[moveIndexred1 - 43].getY();
-                                    redToken1.setPos(redpos[moveIndexred1]);
-                                    gameSquares[x][y].add(redToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexred1 >=40)
-                                {
-                                    x = redPathHome[moveIndexred1 - 43].getX();
-                                    y = redPathHome[moveIndexred1 - 43].getY();
-                                    redToken1.setPos(redPathHome[moveIndexred1]);
-                                    gameSquares[x][y].add(redToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("red2")) {
                         if ((redToken2.getPos().getX() != redHome[1].getX()) && (redToken2.getPos().getY() != redHome[1].getY())) {
                             int x;
                             int y;
 
                             moveIndexred2 += roll;
-                            if (moveIndexred2 <= 39) {
+                            if (moveIndexred2 < 44) {
                                 x = redpos[moveIndexred2].getX();
-                                System.out.println(x + " " + moveIndexred2);
+                                //System.out.println(x + " " + moveIndexred2);
                                 y = redpos[moveIndexred2].getY();
-                                System.out.println(y + " " + moveIndexred2);
+                                //System.out.println(y + " " + moveIndexred2);
                                 redToken2.setPos(redpos[moveIndexred2]);
-                                System.out.println(redToken2.toString());
+                                //System.out.println(redToken2.toString());
                                 gameSquares[x][y].add(redToken2);
                                 repaint();
-                            } else if (moveIndexred2 <= 43) {
-                                x = redPathHome[moveIndexred2 - 40].getX();
-                                y = redPathHome[moveIndexred2 - 40].getY();
-                                redToken2.setPos(redPathHome[moveIndexred2]);
-                                gameSquares[x][y].add(redToken2);
-                                repaint();
-                            }
-                            else if(moveIndexred1 >= 43)
-                            {
+                            } else {
                                 moveIndexred2 = moveIndexred2 - roll;
-                                if(moveIndexred2 <=39)
-                                {
-                                    x = redpos[moveIndexred2 - 43].getX();
-                                    y = redpos[moveIndexred2 - 43].getY();
-                                    redToken2.setPos(redpos[moveIndexred2]);
-                                    gameSquares[x][y].add(redToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexred2 >=40)
-                                {
-                                    x = redPathHome[moveIndexred2 - 43].getX();
-                                    y = redPathHome[moveIndexred2 - 43].getY();
-                                    redToken2.setPos(redPathHome[moveIndexred2]);
-                                    gameSquares[x][y].add(redToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("red3")) {
                         if ((redToken3.getPos().getX() != redHome[2].getX()) && (redToken3.getPos().getY() != redHome[2].getY())) {
                             int x;
                             int y;
 
                             moveIndexred3 += roll;
-                            if (moveIndexred3 <= 39) {
+                            if (moveIndexred3 < 44) {
                                 x = redpos[moveIndexred3].getX();
-                                System.out.println(x + " " + moveIndexred3);
+                                //System.out.println(x + " " + moveIndexred3);
                                 y = redpos[moveIndexred3].getY();
-                                System.out.println(y + " " + moveIndexred3);
+                                //System.out.println(y + " " + moveIndexred3);
                                 redToken3.setPos(redpos[moveIndexred3]);
-                                System.out.println(redToken3.toString());
+                                //System.out.println(redToken3.toString());
                                 gameSquares[x][y].add(redToken3);
                                 repaint();
-                            } else if (moveIndexred3 <= 43) {
-                                x = redPathHome[moveIndexred3 - 40].getX();
-                                y = redPathHome[moveIndexred3 - 40].getY();
-                                redToken3.setPos(redPathHome[moveIndexred3]);
-                                gameSquares[x][y].add(redToken3);
-                                repaint();
-                            }
-                            else if(moveIndexred3 >= 43)
-                            {
+                            } else {
                                 moveIndexred3 = moveIndexred3 - roll;
-                                if(moveIndexred3 <=39)
-                                {
-                                    x = redpos[moveIndexred3 - 43].getX();
-                                    y = redpos[moveIndexred3 - 43].getY();
-                                    redToken3.setPos(redpos[moveIndexred3]);
-                                    gameSquares[x][y].add(redToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexred3 >=40)
-                                {
-                                    x = redPathHome[moveIndexred3 - 43].getX();
-                                    y = redPathHome[moveIndexred3 - 43].getY();
-                                    redToken3.setPos(redPathHome[moveIndexred3]);
-                                    gameSquares[x][y].add(redToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Sorry cant move!! Turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
+
                     } else if (chooseToken.equals("red4")) {
                         if ((redToken4.getPos().getX() != redHome[3].getX()) && (redToken4.getPos().getY() != redHome[3].getY())) {
                             int x;
                             int y;
 
                             moveIndexred4 += roll;
-                            if (moveIndexred4 <= 39) {
+                            if (moveIndexred4 < 44) {
                                 x = redpos[moveIndexred4].getX();
                                 System.out.println(x + " " + moveIndexred4);
                                 y = redpos[moveIndexred4].getY();
@@ -1193,55 +1004,46 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(redToken4.toString());
                                 gameSquares[x][y].add(redToken4);
                                 repaint();
-                            } else if (moveIndexred4 <= 43) {
-                                x = redPathHome[moveIndexred4 - 40].getX();
-                                y = redPathHome[moveIndexred4 - 40].getY();
-                                redToken4.setPos(redPathHome[moveIndexred4]);
-                                gameSquares[x][y].add(redToken4);
-                                repaint();
-                            }
-                            else if(moveIndexred4 >= 43)
-                            {
+                            } else {
                                 moveIndexred4 = moveIndexred4 - roll;
-                                if(moveIndexred4 <=39)
-                                {
-                                    x = redpos[moveIndexred4 - 43].getX();
-                                    y = redpos[moveIndexred4 - 43].getY();
-                                    redToken4.setPos(redpos[moveIndexred4]);
-                                    gameSquares[x][y].add(redToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexred4 >=40)
-                                {
-                                    x = redPathHome[moveIndexred4 - 43].getX();
-                                    y = redPathHome[moveIndexred4 - 43].getY();
-                                    redToken4.setPos(redPathHome[moveIndexred4]);
-                                    gameSquares[x][y].add(redToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     }
                 }
-                else
-                    JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
+                if((redToken1.getPos().getX() == redpos[43].getX() && redToken1.getPos().getY() == redpos[43].getY()) ||
+                        (redToken1.getPos().getX() == redpos[42].getX() && redToken1.getPos().getY() == redpos[43].getY()) ||
+                        (redToken1.getPos().getX() == redpos[41].getX() && redToken1.getPos().getY() == redpos[43].getY()) ||
+                        (redToken1.getPos().getX() == redpos[40].getX() && redToken1.getPos().getY() == redpos[43].getY()) &&
+                                (redToken2.getPos().getX() == redpos[43].getX() && redToken2.getPos().getY() == redpos[43].getY()) ||
+                        (redToken2.getPos().getX() == redpos[42].getX() && redToken2.getPos().getY() == redpos[42].getY()) ||
+                        (redToken2.getPos().getX() == redpos[41].getX() && redToken2.getPos().getY() == redpos[41].getY()) ||
+                        (redToken2.getPos().getX() == redpos[40].getX() && redToken2.getPos().getY() == redpos[40].getY()) &&
+                                (redToken3.getPos().getX() == redpos[43].getX() && redToken3.getPos().getY() == redpos[43].getY()) ||
+                        (redToken3.getPos().getX() == redpos[42].getX() && redToken3.getPos().getY() == redpos[42].getY()) ||
+                        (redToken3.getPos().getX() == redpos[41].getX() && redToken3.getPos().getY() == redpos[41].getY()) ||
+                        (redToken3.getPos().getX() == redpos[40].getX() && redToken3.getPos().getY() == redpos[40].getY()) &&
+                                (redToken4.getPos().getX() == redpos[43].getX() && redToken4.getPos().getY() == redpos[43].getY()) ||
+                        (redToken4.getPos().getX() == redpos[42].getX() && redToken4.getPos().getY() == redpos[42].getY()) ||
+                        (redToken4.getPos().getX() == redpos[41].getX() && redToken4.getPos().getY() == redpos[41].getY()) ||
+                        (redToken4.getPos().getX() == redpos[40].getX() && redToken4.getPos().getY() == redpos[40].getY()))
+                {
+                    players[countPlayers].setWinner(true);
+                }
+                if(players[countPlayers].isWinner())
+                {
+                    players[countPlayers].setWins(players[countPlayers].getWins()+1);
+                }
             }
             if (players[countPlayers].getTokens().equals(greenTokens)) {
-                while((roll == 6)){ /*&& ((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY())) ||
-                        ((blueToken2.getPos().getX() == blueHome[1].getX()) && (blueToken2.getPos().getY() == blueHome[1].getY())) ||
-                        ((blueToken3.getPos().getX() == blueHome[2].getX()) && (blueToken3.getPos().getY() == blueHome[2].getY())) ||
-                        ((blueToken4.getPos().getX() == blueHome[3].getX()) && (blueToken4.getPos().getY() == blueHome[3].getY()))) {*/
+                while ((roll == 6)) {
 
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move green1,green2,green3,green4").toLowerCase();
 
                     while (!chooseToken.equals("green") && !chooseToken.equals("green") && !chooseToken.equals("green3") && !chooseToken.equals("green4")) {
                         chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move green1,green2,green3,green4").toLowerCase();
                     }
-                    //switch (chooseToken) {
-                    //  case "blue1":
+
                     if (chooseToken.equals("green1")) {
                         if (((greenToken1.getPos().getX() == greenHome[0].getX()) && (greenToken1.getPos().getY() == greenHome[0].getY()))) {
                             movegreen1FromHome();
@@ -1251,7 +1053,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexgreen1 += roll;
-                            if (moveIndexgreen1 <= 39) {
+                            if (moveIndexgreen1 < 44) {
                                 x = greenpos[moveIndexgreen1].getX();
                                 System.out.println(x + " " + moveIndexgreen1);
                                 y = greenpos[moveIndexgreen1].getY();
@@ -1260,11 +1062,12 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(greenToken1.toString());
                                 gameSquares[x][y].add(greenToken1);
                                 repaint();
+                            } else {
+                                moveIndexgreen1 = moveIndexgreen1 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
-                    }       //break;
-                    //case "blue2":
-                    else if (chooseToken.equals("green2")) {
+                    } else if (chooseToken.equals("green2")) {
                         if (((greenToken2.getPos().getX() == greenHome[1].getX()) && (greenToken2.getPos().getY() == greenHome[1].getY()))) {
                             movegreen2FromHome();
                             repaint();
@@ -1273,19 +1076,20 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexgreen2 += roll;
-                            if (moveIndexgreen2 <= 39) {
+                            if (moveIndexgreen2 < 44) {
                                 x = greenpos[moveIndexgreen2].getX();
-                                System.out.println(x + " " + moveIndexgreen2);
+                                //System.out.println(x + " " + moveIndexgreen2);
                                 y = greenpos[moveIndexgreen2].getY();
-                                System.out.println(y + " " + moveIndexgreen2);
+                                //System.out.println(y + " " + moveIndexgreen2);
                                 greenToken2.setPos(greenpos[moveIndexgreen2]);
-                                System.out.println(greenToken2.toString());
+                                //System.out.println(greenToken2.toString());
                                 gameSquares[x][y].add(greenToken2);
                                 repaint();
+                            } else {
+                                moveIndexgreen2 = moveIndexgreen2 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
-                        //       break;
-                        //   case "blue3":
                     } else if (chooseToken.equals("green3")) {
                         if (((greenToken3.getPos().getX() == greenHome[2].getX()) && (greenToken3.getPos().getY() == greenHome[2].getY()))) {
                             movegreen3FromHome();
@@ -1295,7 +1099,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexgreen3 += roll;
-                            if (moveIndexgreen3 <= 39) {
+                            if (moveIndexgreen3 < 44) {
                                 x = greenpos[moveIndexgreen3].getX();
                                 System.out.println(x + " " + moveIndexgreen3);
                                 y = greenpos[moveIndexgreen3].getY();
@@ -1304,10 +1108,12 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(greenToken3.toString());
                                 gameSquares[x][y].add(greenToken3);
                                 repaint();
+                            } else {
+                                moveIndexgreen3 = moveIndexgreen3 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
-                        //       break;
-                        //  case "blue4":
+
                     } else if (chooseToken.equals("green4")) {
                         if (((greenToken4.getPos().getX() == greenHome[3].getX()) && (greenToken4.getPos().getY() == greenHome[3].getY()))) {
                             movegreen4FromHome();
@@ -1317,7 +1123,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexgreen4 += roll;
-                            if (moveIndexgreen4 <= 39) {
+                            if (moveIndexgreen4 < 44) {
                                 x = greenpos[moveIndexgreen4].getX();
                                 System.out.println(x + " " + moveIndexgreen4);
                                 y = greenpos[moveIndexgreen4].getY();
@@ -1326,15 +1132,14 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(greenToken4.toString());
                                 gameSquares[x][y].add(greenToken4);
                                 repaint();
+                            } else {
+                                moveIndexgreen4 = moveIndexgreen4 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
                     }
                     roll = players[countPlayers].rolldice();
-                    // break;
-                    //default:
-                    //       JOptionPane.showMessageDialog(null, "Invalid Token choose");
                 }
-
                 if (roll < 6 && (greenToken1.getPos().getX() != greenHome[0].getX()) && (greenToken1.getPos().getY() != greenHome[0].getY()) ||
                         (greenToken2.getPos().getX() != greenHome[1].getX()) && (greenToken2.getPos().getY() != greenHome[1].getY()) ||
                         (greenToken3.getPos().getX() != greenHome[2].getX()) && (greenToken3.getPos().getY() != greenHome[2].getY()) ||
@@ -1350,99 +1155,47 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexgreen1 += roll;
-                            if (moveIndexgreen1 <= 39) {
+                            if (moveIndexgreen1 < 44) {
                                 x = greenpos[moveIndexgreen1].getX();
-                                System.out.println(x + " " + moveIndexgreen1);
+                                //System.out.println(x + " " + moveIndexgreen1);
                                 y = greenpos[moveIndexgreen1].getY();
-                                System.out.println(y + " " + moveIndexgreen1);
+                                //System.out.println(y + " " + moveIndexgreen1);
                                 greenToken1.setPos(greenpos[moveIndexgreen1]);
-                                System.out.println(greenToken1.toString());
+                                //System.out.println(greenToken1.toString());
                                 gameSquares[x][y].add(greenToken1);
                                 repaint();
-                            } else if (moveIndexgreen1 > 39 && moveIndexgreen1 < 43) {
-                                x = greenPathHome[moveIndexgreen1 - 40].getX();
-                                y = greenPathHome[moveIndexgreen1 - 40].getY();
-                                greenToken1.setPos(greenPathHome[moveIndexgreen1]);
-                                gameSquares[x][y].add(greenToken1);
-                                repaint();
-                            }
-                            else if(moveIndexgreen1 >= 43)
-                            {
+                            } else {
                                 moveIndexgreen1 = moveIndexgreen1 - roll;
-                                if(moveIndexgreen1 <=39)
-                                {
-                                    x = greenpos[moveIndexgreen1 - 43].getX();
-                                    y = greenpos[moveIndexgreen1 - 43].getY();
-                                    greenToken1.setPos(greenpos[moveIndexgreen1]);
-                                    gameSquares[x][y].add(greenToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexgreen1 >=40)
-                                {
-                                    x = greenPathHome[moveIndexgreen1 - 43].getX();
-                                    y = greenPathHome[moveIndexgreen1 - 43].getY();
-                                    greenToken1.setPos(greenPathHome[moveIndexgreen1]);
-                                    gameSquares[x][y].add(greenToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("green2")) {
                         if ((greenToken2.getPos().getX() != greenHome[1].getX()) && (greenToken2.getPos().getY() != greenHome[1].getY())) {
                             int x;
                             int y;
 
                             moveIndexgreen2 += roll;
-                            if (moveIndexgreen2 <= 39) {
+                            if (moveIndexgreen2 < 44) {
                                 x = greenpos[moveIndexgreen2].getX();
-                                System.out.println(x + " " + moveIndexred2);
+                                //System.out.println(x + " " + moveIndexred2);
                                 y = greenpos[moveIndexgreen2].getY();
-                                System.out.println(y + " " + moveIndexgreen2);
+                                //System.out.println(y + " " + moveIndexgreen2);
                                 greenToken2.setPos(greenpos[moveIndexgreen2]);
-                                System.out.println(greenToken2.toString());
+                                //System.out.println(greenToken2.toString());
                                 gameSquares[x][y].add(greenToken2);
                                 repaint();
-                            } else if (moveIndexgreen2 <= 43) {
-                                x = greenPathHome[moveIndexgreen2 - 40].getX();
-                                y = greenPathHome[moveIndexgreen2 - 40].getY();
-                                greenToken2.setPos(greenPathHome[moveIndexgreen2]);
-                                gameSquares[x][y].add(greenToken2);
-                                repaint();
-                            }
-                            else if(moveIndexgreen1 >= 43)
-                            {
+                            } else {
                                 moveIndexgreen2 = moveIndexgreen2 - roll;
-                                if(moveIndexgreen2 <=39)
-                                {
-                                    x = greenpos[moveIndexgreen2 - 43].getX();
-                                    y = greenpos[moveIndexgreen2 - 43].getY();
-                                    greenToken2.setPos(greenpos[moveIndexgreen2]);
-                                    gameSquares[x][y].add(greenToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexgreen2 >=40)
-                                {
-                                    x = greenPathHome[moveIndexgreen2 - 43].getX();
-                                    y = greenPathHome[moveIndexgreen2 - 43].getY();
-                                    greenToken2.setPos(greenPathHome[moveIndexgreen2]);
-                                    gameSquares[x][y].add(greenToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("green3")) {
                         if ((greenToken3.getPos().getX() != greenHome[2].getX()) && (greenToken3.getPos().getY() != greenHome[2].getY())) {
                             int x;
                             int y;
 
                             moveIndexgreen3 += roll;
-                            if (moveIndexgreen3 <= 39) {
+                            if (moveIndexgreen3 < 44) {
                                 x = greenpos[moveIndexgreen3].getX();
                                 System.out.println(x + " " + moveIndexgreen3);
                                 y = greenpos[moveIndexgreen3].getY();
@@ -1451,44 +1204,18 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(greenToken3.toString());
                                 gameSquares[x][y].add(greenToken3);
                                 repaint();
-                            } else if (moveIndexgreen3 <= 43) {
-                                x = greenPathHome[moveIndexgreen3 - 40].getX();
-                                y = greenPathHome[moveIndexgreen3 - 40].getY();
-                                greenToken3.setPos(greenPathHome[moveIndexgreen3]);
-                                gameSquares[x][y].add(greenToken3);
-                                repaint();
-                            }
-                            else if(moveIndexgreen3 >= 43)
-                            {
+                            } else {
                                 moveIndexgreen3 = moveIndexgreen3 - roll;
-                                if(moveIndexgreen3 <=39)
-                                {
-                                    x = greenpos[moveIndexgreen3 - 43].getX();
-                                    y = greenpos[moveIndexgreen3 - 43].getY();
-                                    greenToken3.setPos(greenpos[moveIndexgreen3]);
-                                    gameSquares[x][y].add(greenToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexgreen3 >=40)
-                                {
-                                    x = greenPathHome[moveIndexgreen3 - 43].getX();
-                                    y = greenPathHome[moveIndexgreen3 - 43].getY();
-                                    greenToken3.setPos(greenPathHome[moveIndexgreen3]);
-                                    gameSquares[x][y].add(greenToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("green4")) {
                         if ((greenToken4.getPos().getX() != greenHome[3].getX()) && (greenToken4.getPos().getY() != greenHome[3].getY())) {
                             int x;
                             int y;
 
                             moveIndexgreen4 += roll;
-                            if (moveIndexgreen4 <= 39) {
+                            if (moveIndexgreen4 < 44) {
                                 x = greenpos[moveIndexgreen4].getX();
                                 System.out.println(x + " " + moveIndexgreen4);
                                 y = greenpos[moveIndexgreen4].getY();
@@ -1497,48 +1224,49 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(greenToken4.toString());
                                 gameSquares[x][y].add(greenToken4);
                                 repaint();
-                            } else if (moveIndexgreen4 <= 43) {
-                                x = greenPathHome[moveIndexgreen4 - 40].getX();
-                                y = greenPathHome[moveIndexgreen4 - 40].getY();
-                                greenToken4.setPos(greenPathHome[moveIndexgreen4]);
-                                gameSquares[x][y].add(greenToken4);
-                                repaint();
-                            }
-                            else if(moveIndexgreen4 >= 43)
-                            {
+                            } else {
                                 moveIndexgreen4 = moveIndexgreen4 - roll;
-                                if(moveIndexgreen4 <=39)
-                                {
-                                    x = greenpos[moveIndexgreen4 - 43].getX();
-                                    y = greenpos[moveIndexgreen4 - 43].getY();
-                                    greenToken4.setPos(greenpos[moveIndexgreen4]);
-                                    gameSquares[x][y].add(greenToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexgreen4 >=40)
-                                {
-                                    x = greenPathHome[moveIndexgreen4 - 43].getX();
-                                    y = greenPathHome[moveIndexgreen4 - 43].getY();
-                                    greenToken4.setPos(greenPathHome[moveIndexgreen4]);
-                                    gameSquares[x][y].add(greenToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     }
                 }
-                else
-                    JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
+                //winner
+                if((greenToken1.getPos().getX() == greenpos[43].getX() && greenToken1.getPos().getY() == greenpos[43].getY()) ||
+                        (greenToken1.getPos().getX() == greenpos[42].getX() && greenToken1.getPos().getY() == greenpos[42].getY()) ||
+                        (greenToken1.getPos().getX() == greenpos[41].getX() && greenToken1.getPos().getY() == greenpos[41].getY()) ||
+                        (greenToken1.getPos().getX() == greenpos[40].getX() && greenToken1.getPos().getY() == greenpos[40].getY()) &&
+                                (greenToken2.getPos().getX() == greenpos[43].getX() && greenToken2.getPos().getY() == greenpos[43].getY()) ||
+                        (greenToken2.getPos().getX() == greenpos[42].getX() && greenToken2.getPos().getY() == greenpos[42].getY()) ||
+                        (greenToken2.getPos().getX() == greenpos[41].getX() && greenToken2.getPos().getY() == greenpos[41].getY()) ||
+                        (greenToken2.getPos().getX() == greenpos[40].getX() && greenToken2.getPos().getY() == greenpos[40].getY()) &&
+                                (greenToken3.getPos().getX() == greenpos[43].getX() && greenToken3.getPos().getY() == greenpos[43].getY()) ||
+                        (greenToken3.getPos().getX() == greenpos[42].getX() && greenToken3.getPos().getY() == greenpos[42].getY()) ||
+                        (greenToken3.getPos().getX() == greenpos[41].getX() && greenToken3.getPos().getY() == greenpos[41].getY()) ||
+                        (greenToken3.getPos().getX() == greenpos[40].getX() && greenToken3.getPos().getY() == greenpos[40].getY()) &&
+                                (greenToken4.getPos().getX() == greenpos[43].getX() && greenToken4.getPos().getY() == greenpos[43].getY()) ||
+                        (greenToken4.getPos().getX() == greenpos[42].getX() && greenToken4.getPos().getY() == greenpos[42].getY()) ||
+                        (greenToken4.getPos().getX() == greenpos[41].getX() && greenToken4.getPos().getY() == greenpos[41].getY()) ||
+                        (greenToken4.getPos().getX() == greenpos[40].getX() && greenToken4.getPos().getY() == greenpos[40].getY()))
+                {
+                    players[countPlayers].setWinner(true);
+                }
+                if(players[countPlayers].isWinner())
+                {
+                    players[countPlayers].setWins(players[countPlayers].getWins()+1);
+                    //got code  here to save the winners details once the game is won: https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+                    try {
+                        // write the objects i.e. the players to a file
+                        objectOutputStream(players);
+                        JOptionPane.showMessageDialog(null, "Writing to File");
+                    } catch (Exception e1) {
+                        // error message if there is a problem with the write
+                        JOptionPane.showMessageDialog(null, "Error saving the file!");
+                    }
+                }
             }
             if (players[countPlayers].getTokens().equals(yellowTokens)) {
-                while((roll == 6)){ /*&& ((blueToken1.getPos().getX() == blueHome[0].getX()) && (blueToken1.getPos().getY() == blueHome[0].getY())) ||
-                        ((blueToken2.getPos().getX() == blueHome[1].getX()) && (blueToken2.getPos().getY() == blueHome[1].getY())) ||
-                        ((blueToken3.getPos().getX() == blueHome[2].getX()) && (blueToken3.getPos().getY() == blueHome[2].getY())) ||
-                        ((blueToken4.getPos().getX() == blueHome[3].getX()) && (blueToken4.getPos().getY() == blueHome[3].getY()))) {*/
-
+                while ((roll == 6)) {
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move yellow1,yellow2,yellow3,yellow4").toLowerCase();
 
                     while (!chooseToken.equals("yellow1") && !chooseToken.equals("yellow2") && !chooseToken.equals("yellow3") && !chooseToken.equals("yellow4")) {
@@ -1553,7 +1281,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexyellow1 += roll;
-                            if (moveIndexyellow1 <= 39) {
+                            if (moveIndexyellow1 < 44) {
                                 x = yellowpos[moveIndexyellow1].getX();
                                 System.out.println(x + " " + moveIndexyellow1);
                                 y = yellowpos[moveIndexyellow1].getY();
@@ -1562,10 +1290,12 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken1.toString());
                                 gameSquares[x][y].add(yellowToken1);
                                 repaint();
+                            } else {
+                                moveIndexyellow1 = moveIndexyellow1 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
-                    }
-                    else if (chooseToken.equals("yellow2")) {
+                    } else if (chooseToken.equals("yellow2")) {
                         if (((yellowToken2.getPos().getX() == yellowHome[1].getX()) && (yellowToken2.getPos().getY() == yellowHome[1].getY()))) {
                             moveyellow2FromHome();
                             repaint();
@@ -1574,7 +1304,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexyellow2 += roll;
-                            if (moveIndexyellow2 <= 39) {
+                            if (moveIndexyellow2 < 44) {
                                 x = yellowpos[moveIndexyellow2].getX();
                                 System.out.println(x + " " + moveIndexyellow2);
                                 y = yellowpos[moveIndexyellow2].getY();
@@ -1583,11 +1313,13 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken2.toString());
                                 gameSquares[x][y].add(yellowToken2);
                                 repaint();
+                            } else {
+                                moveIndexyellow2 = moveIndexyellow2 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
-                        }
-                        else if (chooseToken.equals("yellow3")) {
-                        if (((yellowToken3.getPos().getX() ==yellowHome[2].getX()) && (yellowToken3.getPos().getY() == yellowHome[2].getY()))) {
+                    } else if (chooseToken.equals("yellow3")) {
+                        if (((yellowToken3.getPos().getX() == yellowHome[2].getX()) && (yellowToken3.getPos().getY() == yellowHome[2].getY()))) {
                             moveyellow3FromHome();
                             repaint();
                         } else if (((yellowToken3.getPos().getX() != yellowHome[2].getX()) && (yellowToken3.getPos().getY() != yellowHome[2].getY()))) {
@@ -1595,7 +1327,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexyellow3 += roll;
-                            if (moveIndexyellow3 <= 39) {
+                            if (moveIndexyellow3 < 44) {
                                 x = yellowpos[moveIndexyellow3].getX();
                                 System.out.println(x + " " + moveIndexyellow3);
                                 y = yellowpos[moveIndexyellow3].getY();
@@ -1604,6 +1336,9 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken3.toString());
                                 gameSquares[x][y].add(yellowToken3);
                                 repaint();
+                            } else {
+                                moveIndexyellow3 = moveIndexyellow3 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
                     } else if (chooseToken.equals("yellow4")) {
@@ -1615,7 +1350,7 @@ public class LudoBoard extends JFrame implements ActionListener {
                             int y;
 
                             moveIndexyellow4 += roll;
-                            if (moveIndexyellow4 <= 39) {
+                            if (moveIndexyellow4 < 44) {
                                 x = yellowpos[moveIndexyellow4].getX();
                                 System.out.println(x + " " + moveIndexyellow4);
                                 y = yellowpos[moveIndexyellow4].getY();
@@ -1624,14 +1359,16 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken4.toString());
                                 gameSquares[x][y].add(yellowToken4);
                                 repaint();
+                            } else {
+                                moveIndexyellow4 = moveIndexyellow3 - roll;
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
                         }
                     }
                     roll = players[countPlayers].rolldice();
                 }
-
                 if (roll < 6 && (yellowToken1.getPos().getX() != yellowHome[0].getX()) && (yellowToken1.getPos().getY() != yellowHome[0].getY()) ||
-                        (yellowToken2.getPos().getX() !=yellowHome[1].getX()) && (yellowToken2.getPos().getY() != yellowHome[1].getY()) ||
+                        (yellowToken2.getPos().getX() != yellowHome[1].getX()) && (yellowToken2.getPos().getY() != yellowHome[1].getY()) ||
                         (yellowToken3.getPos().getX() != yellowHome[2].getX()) && (yellowToken3.getPos().getY() != yellowHome[2].getY()) ||
                         (yellowToken4.getPos().getX() != yellowHome[3].getX()) && (yellowToken4.getPos().getY() != yellowHome[3].getY())) {
                     String chooseToken = JOptionPane.showInputDialog("please choice a token to move yellow1,yellow2,yellow3,yellow4").toLowerCase();
@@ -1639,13 +1376,13 @@ public class LudoBoard extends JFrame implements ActionListener {
                     while (!chooseToken.equals("yellow1") && !chooseToken.equals("yellow2") && !chooseToken.equals("yellow3") && !chooseToken.equals("yellow4")) {
                         chooseToken = JOptionPane.showInputDialog("Invalid choice!! please choice a token to move yellow1,yellow2,yellow3,yellow4").toLowerCase();
                     }
-                    if (chooseToken.equals("yellow")) {
+                    if (chooseToken.equals("yellow1")) {
                         if ((yellowToken1.getPos().getX() != yellowHome[0].getX()) && (yellowToken1.getPos().getY() != yellowHome[0].getY())) {
                             int x;
                             int y;
 
                             moveIndexyellow1 += roll;
-                            if (moveIndexyellow1 <= 39) {
+                            if (moveIndexyellow1 < 44) {
                                 x = yellowpos[moveIndexyellow1].getX();
                                 System.out.println(x + " " + moveIndexyellow1);
                                 y = yellowpos[moveIndexyellow1].getY();
@@ -1654,44 +1391,18 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken1.toString());
                                 gameSquares[x][y].add(yellowToken1);
                                 repaint();
-                            } else if (moveIndexyellow1 > 39 && moveIndexyellow1 < 43) {
-                                x = yellowPathHome[moveIndexyellow1 - 40].getX();
-                                y = yellowPathHome[moveIndexyellow1 - 40].getY();
-                                yellowToken1.setPos(yellowPathHome[moveIndexyellow1]);
-                                gameSquares[x][y].add(yellowToken1);
-                                repaint();
-                            }
-                            else if(moveIndexyellow1 >= 43)
-                            {
+                            } else {
                                 moveIndexyellow1 = moveIndexyellow1 - roll;
-                                if(moveIndexyellow1 <=39)
-                                {
-                                    x = yellowpos[moveIndexyellow1 - 43].getX();
-                                    y = yellowpos[moveIndexyellow1 - 43].getY();
-                                    yellowToken1.setPos(yellowpos[moveIndexyellow1]);
-                                    gameSquares[x][y].add(yellowToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexyellow1 >=40)
-                                {
-                                    x = yellowPathHome[moveIndexyellow1 - 43].getX();
-                                    y = yellowPathHome[moveIndexyellow1 - 43].getY();
-                                    yellowToken1.setPos(yellowPathHome[moveIndexyellow1]);
-                                    gameSquares[x][y].add(yellowToken1);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("yellow2")) {
                         if ((yellowToken2.getPos().getX() != yellowHome[1].getX()) && (yellowToken2.getPos().getY() != yellowHome[1].getY())) {
                             int x;
                             int y;
 
                             moveIndexyellow2 += roll;
-                            if (moveIndexgreen2 <= 39) {
+                            if (moveIndexgreen2 < 44) {
                                 x = yellowpos[moveIndexyellow2].getX();
                                 System.out.println(x + " " + moveIndexred2);
                                 y = yellowpos[moveIndexyellow2].getY();
@@ -1700,44 +1411,18 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken2.toString());
                                 gameSquares[x][y].add(yellowToken2);
                                 repaint();
-                            } else if (moveIndexyellow2 <= 43) {
-                                x = yellowPathHome[moveIndexyellow2 - 40].getX();
-                                y = yellowPathHome[moveIndexyellow2 - 40].getY();
-                                yellowToken2.setPos(yellowPathHome[moveIndexyellow2]);
-                                gameSquares[x][y].add(yellowToken2);
-                                repaint();
-                            }
-                            else if(moveIndexyellow1 >= 43)
-                            {
+                            } else {
                                 moveIndexyellow2 = moveIndexyellow2 - roll;
-                                if(moveIndexyellow2 <=39)
-                                {
-                                    x = yellowpos[moveIndexyellow2 - 43].getX();
-                                    y = yellowpos[moveIndexyellow2 - 43].getY();
-                                    yellowToken2.setPos(yellowpos[moveIndexyellow2]);
-                                    gameSquares[x][y].add(yellowToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexyellow2 >=40)
-                                {
-                                    x = yellowPathHome[moveIndexyellow2 - 43].getX();
-                                    y = yellowPathHome[moveIndexyellow2 - 43].getY();
-                                    yellowToken2.setPos(yellowPathHome[moveIndexyellow2]);
-                                    gameSquares[x][y].add(yellowToken2);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("yellow3")) {
                         if ((yellowToken3.getPos().getX() != yellowHome[2].getX()) && (yellowToken3.getPos().getY() != yellowHome[2].getY())) {
                             int x;
                             int y;
 
                             moveIndexyellow3 += roll;
-                            if (moveIndexyellow3 <= 39) {
+                            if (moveIndexyellow3 < 44) {
                                 x = yellowpos[moveIndexyellow3].getX();
                                 System.out.println(x + " " + moveIndexyellow3);
                                 y = yellowpos[moveIndexyellow3].getY();
@@ -1746,44 +1431,18 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken3.toString());
                                 gameSquares[x][y].add(yellowToken3);
                                 repaint();
-                            } else if (moveIndexyellow3 <= 43) {
-                                x = yellowPathHome[moveIndexyellow3 - 40].getX();
-                                y = yellowPathHome[moveIndexyellow3 - 40].getY();
-                                yellowToken3.setPos(yellowPathHome[moveIndexyellow3]);
-                                gameSquares[x][y].add(yellowToken3);
-                                repaint();
-                            }
-                            else if(moveIndexyellow3 >= 43)
-                            {
+                            } else {
                                 moveIndexyellow3 = moveIndexyellow3 - roll;
-                                if(moveIndexyellow3 <=39)
-                                {
-                                    x = yellowpos[moveIndexyellow3 - 43].getX();
-                                    y = yellowpos[moveIndexyellow3 - 43].getY();
-                                    yellowToken3.setPos(yellowpos[moveIndexyellow3]);
-                                    gameSquares[x][y].add(yellowToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexgreen3 >=40)
-                                {
-                                    x = greenPathHome[moveIndexgreen3 - 43].getX();
-                                    y = greenPathHome[moveIndexgreen3 - 43].getY();
-                                    greenToken3.setPos(greenPathHome[moveIndexgreen3]);
-                                    gameSquares[x][y].add(greenToken3);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     } else if (chooseToken.equals("yellow4")) {
                         if ((yellowToken4.getPos().getX() != yellowHome[3].getX()) && (yellowToken4.getPos().getY() != yellowHome[3].getY())) {
                             int x;
                             int y;
 
                             moveIndexyellow4 += roll;
-                            if (moveIndexyellow4 <= 39) {
+                            if (moveIndexyellow4 < 44) {
                                 x = yellowpos[moveIndexyellow4].getX();
                                 System.out.println(x + " " + moveIndexyellow4);
                                 y = yellowpos[moveIndexyellow4].getY();
@@ -1792,41 +1451,46 @@ public class LudoBoard extends JFrame implements ActionListener {
                                 System.out.println(yellowToken4.toString());
                                 gameSquares[x][y].add(yellowToken4);
                                 repaint();
-                            } else if (moveIndexyellow4 <= 43) {
-                                x = yellowPathHome[moveIndexyellow4 - 40].getX();
-                                y = yellowPathHome[moveIndexyellow4 - 40].getY();
-                                yellowToken4.setPos(yellowPathHome[moveIndexyellow4]);
-                                gameSquares[x][y].add(yellowToken4);
-                                repaint();
-                            }
-                            else if(moveIndexyellow4 >= 43)
-                            {
+                            } else {
                                 moveIndexyellow4 = moveIndexyellow4 - roll;
-                                if(moveIndexyellow4 <=39)
-                                {
-                                    x = yellowpos[moveIndexyellow4 - 43].getX();
-                                    y = yellowpos[moveIndexyellow4 - 43].getY();
-                                    yellowToken4.setPos(yellowpos[moveIndexyellow4]);
-                                    gameSquares[x][y].add(yellowToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
-                                else if(moveIndexyellow4 >=40)
-                                {
-                                    x = yellowPathHome[moveIndexyellow4 - 43].getX();
-                                    y = yellowPathHome[moveIndexyellow4 - 43].getY();
-                                    yellowToken4.setPos(yellowPathHome[moveIndexyellow4]);
-                                    gameSquares[x][y].add(yellowToken4);
-                                    repaint();
-                                    JOptionPane.showMessageDialog(null,"Sorry cant move!! Turn over");
-                                }
+                                JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
                             }
-                        } else
-                            JOptionPane.showMessageDialog(null, "Can't move that piece!! Sorry turn over");
+                        }
                     }
                 }
-                else
-                    JOptionPane.showMessageDialog(null, players[countPlayers] + "Can't move");
+                //winner
+                if((yellowToken1.getPos().getX() == yellowpos[43].getX() && yellowToken1.getPos().getY() == yellowpos[43].getY()) ||
+                        (yellowToken1.getPos().getX() == yellowpos[42].getX() && yellowToken1.getPos().getY() == yellowpos[42].getY()) ||
+                        (yellowToken1.getPos().getX() == yellowpos[41].getX() && yellowToken1.getPos().getY() == yellowpos[41].getY()) ||
+                        (yellowToken1.getPos().getX() == yellowpos[40].getX() && yellowToken1.getPos().getY() == yellowpos[40].getY()) &&
+                                (yellowToken2.getPos().getX() == yellowpos[43].getX() && yellowToken2.getPos().getY() == yellowpos[43].getY()) ||
+                        (yellowToken2.getPos().getX() == yellowpos[42].getX() && yellowToken2.getPos().getY() == yellowpos[42].getY()) ||
+                        (yellowToken2.getPos().getX() == yellowpos[41].getX() && yellowToken2.getPos().getY() == yellowpos[41].getY()) ||
+                        (yellowToken2.getPos().getX() == yellowpos[40].getX() && yellowToken2.getPos().getY() == yellowpos[40].getY()) &&
+                                (yellowToken3.getPos().getX() == yellowpos[43].getX() && yellowToken3.getPos().getY() == yellowpos[43].getY()) ||
+                        (yellowToken3.getPos().getX() == yellowpos[42].getX() && yellowToken3.getPos().getY() == yellowpos[42].getY()) ||
+                        (yellowToken3.getPos().getX() == yellowpos[41].getX() && yellowToken3.getPos().getY() == yellowpos[41].getY()) ||
+                        (yellowToken3.getPos().getX() == yellowpos[40].getX() && yellowToken3.getPos().getY() == yellowpos[40].getY()) &&
+                                (yellowToken4.getPos().getX() == yellowpos[43].getX() && yellowToken4.getPos().getY() == yellowpos[43].getY()) ||
+                        (yellowToken4.getPos().getX() == yellowpos[42].getX() && yellowToken4.getPos().getY() == yellowpos[42].getY()) ||
+                        (yellowToken4.getPos().getX() == yellowpos[41].getX() && yellowToken4.getPos().getY() == yellowpos[41].getY()) ||
+                        (yellowToken4.getPos().getX() == yellowpos[40].getX() && yellowToken4.getPos().getY() == yellowpos[40].getY()))
+                {
+                    players[countPlayers].setWinner(true);
+                }
+                if(players[countPlayers].isWinner())
+                {
+                    players[countPlayers].setWins(players[countPlayers].getWins()+1);
+                    //got code  here to save the winners details once the game is won: https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+                    try {
+                        // write the objects i.e. the players to a file
+                        objectOutputStream(players);
+                        JOptionPane.showMessageDialog(null, "Writing to File");
+                    } catch (Exception e1) {
+                        // error message if there is a problem with the write
+                        JOptionPane.showMessageDialog(null, "Error saving the file!");
+                    }
+                }
             }
 
 
@@ -1843,30 +1507,38 @@ public class LudoBoard extends JFrame implements ActionListener {
         }
         if(e.getSource() == HighScore)
         {
-            getHighScores(players);
+            //got the code here for the actionListener to implement the code once the button is pressed https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+            try {
+                JOptionPane.showMessageDialog(null, "Reading into Program");
+
+                getHighScores(players);
+            } catch (Exception e1) {
+
+                JOptionPane.showMessageDialog(null, "Error opening the file!");
+            }
         }
     }
-    public void getHighScores(Player[] player)
-    {
+
+    public void getHighScores(Player[] player) throws Exception {
+
         JTextArea textArea = new JTextArea("HighScores");
         Font font = new Font("monospaced",Font.PLAIN,12);
         textArea.setFont(font);
         textArea.setSize(200,200);
 
-        String text = "";
-        int temp =0;
-        for(Player p:players)
-        {
-            if(p.getWins() < p.getWins())
-            {
-                text += players+". "  + p.toString() + "\n";
-            }
+        //got the code here for the loading of the file: https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+        File inFile = new File("objects.data");
+        FileInputStream inFileStream = new FileInputStream(inFile);
+        ObjectInputStream in = new ObjectInputStream(inFileStream);
+
+        String display = "";
+        for(Player p : players) {
+            display += p.toString();
         }
+        textArea.append(display);
 
-        textArea.append(text);
+        in.close();
     }
-
-
 
 
     public void playerMenu() {
@@ -2084,6 +1756,16 @@ public class LudoBoard extends JFrame implements ActionListener {
         yellowToken4.setPos(yellowpos[0]);
 
         return gameSquares[yellowpos[0].getX()][yellowpos[0].getY()].add(yellowToken4);
+    }
+
+//got the code here for the writing of the file https://github.com/DaithiLacha/SnakesAndLadders/blob/master/src/SnakesAndLaddersGUI.java
+    static void objectOutputStream(Player[] players) throws Exception {
+        File save = new File("objects.data");
+        FileOutputStream outFileStream = new FileOutputStream(save);
+        ObjectOutputStream os = new ObjectOutputStream(outFileStream);
+
+        os.writeObject(players);
+        os.close();
     }
 
 

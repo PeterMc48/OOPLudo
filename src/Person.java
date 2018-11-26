@@ -1,4 +1,4 @@
-public abstract class Person{
+public abstract class Person implements PlayersTurn{
     private String name;
 
     /**
@@ -27,13 +27,18 @@ public abstract class Person{
     }
 
     /**
-     *single argument constructor fo rPerson class
+     *single argument constructor for Person class
      */
     public Person(String name)
     {
         setName(name);
     }
 
+
+    /**
+     * toString Method for Person Class
+     * @return
+     */
 
     @Override
     public String toString() {
